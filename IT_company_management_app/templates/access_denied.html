@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied · NexusCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        /* ========== ERROR CARD ========== */
+        .error-card {
+            width: 100%;
+            max-width: 520px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 30px 60px -22px rgba(0, 0, 0, 0.25);
+            padding: 2.8rem 2.2rem 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .error-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #dc2626, #ef4444, #f87171);
+        }
+
+        /* Brand */
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+            margin-bottom: 2rem;
+        }
+
+        .brand-icon {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 18px -4px rgba(37, 99, 235, 0.35);
+        }
+
+        .brand-text span {
+            color: #2563eb;
+        }
+
+        /* Error icon */
+        .error-icon {
+            width: 88px;
+            height: 88px;
+            border-radius: 26px;
+            background: #fef2f2;
+            color: #dc2626;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.3rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 14px 30px -12px rgba(220, 38, 38, 0.4);
+        }
+
+        .error-icon i {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.08);
+                opacity: 0.85;
+            }
+        }
+
+        /* Text */
+        .error-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            margin-bottom: 0.6rem;
+        }
+
+        .error-message {
+            font-size: 0.95rem;
+            color: #64748b;
+            line-height: 1.6;
+            max-width: 360px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Hint box */
+        .hint-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 1rem 1.15rem;
+            margin-bottom: 2rem;
+            text-align: left;
+            font-size: 0.83rem;
+            color: #475569;
+            line-height: 1.55;
+        }
+
+        .hint-box i {
+            color: #2563eb;
+            font-size: 1rem;
+            margin-top: 0.1rem;
+            flex-shrink: 0;
+        }
+
+        .hint-box strong {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        /* Buttons */
+        .error-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.6rem;
+            border-radius: 13px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            box-shadow: 0 10px 20px -10px rgba(37, 99, 235, 0.6);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 26px -12px rgba(37, 99, 235, 0.7);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+
+        /* Error code */
+        .error-code {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem 0.75rem;
+            }
+
+            .error-card {
+                padding: 2rem 1.4rem 1.8rem;
+                border-radius: 24px;
+            }
+
+            .error-title {
+                font-size: 1.35rem;
+            }
+
+            .error-icon {
+                width: 76px;
+                height: 76px;
+                border-radius: 22px;
+                font-size: 2rem;
+            }
+
+            .brand {
+                font-size: 1.05rem;
+            }
+
+            .brand-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="error-card">
+
+        <!-- Brand -->
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-cubes"></i>
+            </div>
+            <div class="brand-text">Nexus<span>Core</span></div>
+        </div>
+
+        <!-- Error icon -->
+        <div class="error-icon">
+            <i class="fas fa-shield-halved"></i>
+        </div>
+
+        <!-- Text -->
+        <h1 class="error-title">Access Denied</h1>
+        <p class="error-message">
+            You do not have permission to perform this action. If you believe this is a mistake, please contact your administrator.
+        </p>
+
+        <!-- Hint box -->
+        <div class="hint-box">
+            <i class="fas fa-circle-info"></i>
+            <div>
+                <strong>Need access?</strong> Request elevated permissions from your HR or IT administrator to unlock this feature.
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="error-actions">
+            <a href="{% url 'bug_list' %}" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Back to Bug Tracking
+            </a>
+            <a href="{% url 'employeedashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-house"></i> Go to Dashboard
+            </a>
+        </div>
+
+        <!-- Error code -->
+        <div class="error-code">
+            <i class="fas fa-lock" style="margin-right: 5px;"></i> Error 403 · Forbidden
+        </div>
+
+    </div>
+
+</body>
+
+</html>

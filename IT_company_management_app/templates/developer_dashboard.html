@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Dashboard · NexusCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* ========== LAYOUT ========== */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-brand-icon {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 18px -4px rgba(124, 58, 237, 0.35);
+        }
+
+        .sidebar-brand-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+
+        .sidebar-brand-text span {
+            color: #a78bfa;
+        }
+
+        .sidebar-brand-tag {
+            display: block;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            font-weight: 600;
+            margin-top: 0.15rem;
+        }
+
+        /* Mini user profile */
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1.5rem;
+            margin: 0 0.75rem 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+        }
+
+        .sidebar-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-user-info {
+            overflow: hidden;
+        }
+
+        .sidebar-user-name {
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-user-role {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Navigation */
+        .sidebar-nav {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .nav-section-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            padding: 1rem 0.75rem 0.45rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            border-radius: 11px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.18s ease;
+            position: relative;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 0.98rem;
+            color: #94a3b8;
+            transition: color 0.18s;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: white;
+        }
+
+        .nav-item:hover i {
+            color: #a78bfa;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: white;
+            box-shadow: 0 8px 18px -8px rgba(124, 58, 237, 0.6);
+        }
+
+        .nav-item.active i {
+            color: white;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: white;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.15rem 0.45rem;
+            border-radius: 100px;
+            line-height: 1.4;
+        }
+
+        .nav-item.active .nav-badge {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-badge.amber {
+            background: #f59e0b;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 0.75rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 0.5rem;
+        }
+
+        .nav-item.logout {
+            color: #fca5a5;
+            cursor: pointer;
+        }
+
+        .nav-item.logout i {
+            color: #f87171;
+        }
+
+        .nav-item.logout:hover {
+            background: rgba(239, 68, 68, 0.12);
+            color: #fecaca;
+        }
+
+        .nav-item.logout:hover i {
+            color: #fca5a5;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 1.5rem 2rem 3rem;
+            min-width: 0;
+        }
+
+        /* Top bar */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .topbar-left h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .topbar-left p {
+            color: #64748b;
+            font-size: 0.88rem;
+            margin-top: 0.15rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .topbar-icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #475569;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.18s;
+            position: relative;
+            text-decoration: none;
+        }
+
+        /* Welcome banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 50%, #8b5cf6 100%);
+            border-radius: 22px;
+            padding: 2rem 2.2rem;
+            color: white;
+            margin-bottom: 1.75rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -20px rgba(124, 58, 237, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .welcome-banner::after {
+            content: "";
+            position: absolute;
+            right: -60px;
+            top: -60px;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .welcome-banner-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-banner h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+
+        .welcome-banner p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 520px;
+        }
+
+        .welcome-banner-meta {
+            display: flex;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .welcome-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            background: rgba(255, 255, 255, 0.14);
+            padding: 0.45rem 0.9rem;
+            border-radius: 100px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.2);
+            padding: 1.4rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 22px 36px -18px rgba(0, 0, 0, 0.25);
+        }
+
+        .stat-info {
+            min-width: 0;
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .stat-value {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+
+        .stat-trend {
+            font-size: 0.73rem;
+            font-weight: 600;
+            padding: 0.18rem 0.5rem;
+            border-radius: 100px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-trend.up {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .stat-trend.neutral {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .stat-trend.down {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.purple { background: #f5f3ff; color: #7c3aed; }
+        .stat-icon.blue { background: #eef2ff; color: #2563eb; }
+        .stat-icon.amber { background: #fffbeb; color: #d97706; }
+        .stat-icon.red { background: #fef2f2; color: #dc2626; }
+
+        /* Content grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 22px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .panel-header h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .panel-header h3 i {
+            color: #7c3aed;
+            font-size: 0.9rem;
+        }
+
+        .panel-link {
+            font-size: 0.8rem;
+            color: #7c3aed;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .panel-link:hover {
+            text-decoration: underline;
+        }
+
+        .panel-body {
+            padding: 1.25rem 1.5rem;
+        }
+
+        /* Project items */
+        .project-item {
+            padding: 0.95rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .project-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .project-item:first-child {
+            padding-top: 0;
+        }
+
+        .project-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.55rem;
+        }
+
+        .project-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-name i {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        .project-percent {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0f172a;
+            flex-shrink: 0;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 100px;
+        }
+
+        .progress-fill.purple { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
+        .progress-fill.blue { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+        .progress-fill.green { background: linear-gradient(90deg, #059669, #10b981); }
+
+        /* Task items */
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            padding: 0.85rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .task-item:first-child {
+            padding-top: 0;
+        }
+
+        .task-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid #cbd5e1;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            font-size: 0.65rem;
+        }
+
+        .task-check.done {
+            background: #7c3aed;
+            border-color: #7c3aed;
+            color: white;
+        }
+
+        .task-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .task-title.done {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.76rem;
+            color: #64748b;
+            flex-wrap: wrap;
+        }
+
+        .task-priority {
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .priority-high { background: #fef2f2; color: #dc2626; }
+        .priority-medium { background: #fffbeb; color: #d97706; }
+        .priority-low { background: #ecfdf5; color: #059669; }
+
+        /* Bug items */
+        .bug-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            padding: 0.85rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .bug-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .bug-item:first-child {
+            padding-top: 0;
+        }
+
+        .bug-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .bug-icon.critical { background: #fef2f2; color: #dc2626; }
+        .bug-icon.major { background: #fffbeb; color: #d97706; }
+        .bug-icon.minor { background: #eef2ff; color: #2563eb; }
+
+        .bug-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .bug-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.2rem;
+        }
+
+        .bug-meta {
+            font-size: 0.76rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .bug-status {
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.15rem 0.55rem;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .status-open { background: #fef2f2; color: #dc2626; }
+        .status-progress { background: #eef2ff; color: #2563eb; }
+        .status-fixed { background: #ecfdf5; color: #059669; }
+
+        /* Leave balance card */
+        .leave-balance {
+            text-align: center;
+            padding: 0.5rem 0 1rem;
+        }
+
+        .leave-value {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            color: #0f172a;
+            line-height: 1;
+        }
+
+        .leave-value span {
+            font-size: 1.4rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-left: 0.15rem;
+        }
+
+        .leave-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 0.4rem;
+            font-weight: 500;
+        }
+
+        .leave-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .leave-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .leave-row .label {
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .leave-row .label i {
+            color: #7c3aed;
+            font-size: 0.8rem;
+        }
+
+        .leave-row .value {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        /* Apply Leave button */
+        .btn-apply-leave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 13px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px -10px rgba(124, 58, 237, 0.6);
+            font-family: 'Inter', sans-serif;
+            margin-top: 1.25rem;
+        }
+
+        .btn-apply-leave:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 26px -12px rgba(124, 58, 237, 0.7);
+        }
+
+        /* ========== LOGOUT CONFIRMATION MODAL ========== */
+        .logout-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logout-modal-overlay.active {
+            display: flex;
+        }
+
+        .logout-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem 1.8rem 1.6rem;
+            max-width: 380px;
+            width: calc(100% - 2rem);
+            text-align: center;
+            box-shadow: 0 40px 60px -20px rgba(0, 0, 0, 0.4);
+        }
+
+        .logout-modal-icon {
+            width: 64px;
+            height: 64px;
+            background: #fef2f2;
+            color: #dc2626;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1.2rem;
+        }
+
+        .logout-modal h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .logout-modal p {
+            font-size: 0.88rem;
+            color: #64748b;
+            margin-bottom: 1.6rem;
+            line-height: 1.5;
+        }
+
+        .logout-modal-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .logout-modal-actions button,
+        .logout-modal-actions a {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.18s;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0 !important;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .btn-confirm-logout {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            box-shadow: 0 8px 18px -8px rgba(220, 38, 38, 0.5);
+        }
+
+        .btn-confirm-logout:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 22px -10px rgba(220, 38, 38, 0.7);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 860px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 240px;
+                padding: 1.25rem 1.25rem 2.5rem;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .dashboard-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                padding: 1rem 0;
+            }
+
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+
+            .nav-section-label {
+                width: 100%;
+                padding: 0.75rem 0.75rem 0.25rem;
+            }
+
+            .nav-item {
+                flex: 1 1 auto;
+                min-width: 140px;
+                font-size: 0.83rem;
+                padding: 0.55rem 0.7rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.25rem 1rem 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-item {
+                min-width: 100%;
+            }
+
+            .topbar-left h1 {
+                font-size: 1.25rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-banner {
+                padding: 1.5rem 1.4rem;
+            }
+
+            .welcome-banner h2 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="sidebar">
+
+            <!-- Brand -->
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div>
+                    <div class="sidebar-brand-text">Nexus<span>Core</span></div>
+                    <span class="sidebar-brand-tag">{{employee.role}}</span>
+                </div>
+            </div>
+
+            <!-- Mini user profile -->
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar">{{ employee.name|slice:":2"|upper }}</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name">{{ employee.name }}</div>
+                    <div class="sidebar-user-role"> {{ employee.designation }}</div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="sidebar-nav">
+
+                <div class="nav-section-label">Main</div>
+
+                <a href="{% url 'developer_dashboard' %}" class="nav-item active">
+                    <i class="fas fa-house"></i> Dashboard
+                </a>
+
+                <a href="{% url 'developer_profile' %}" class="nav-item">
+                    <i class="fas fa-id-card"></i> My Profile
+                </a>
+
+                <a href="{% url 'developer_project' %}" class="nav-item">
+                    <i class="fas fa-folder-open"></i> My Projects
+                </a>
+
+                <a href="{% url 'developer_tasks'%}" class="nav-item">
+                    <i class="fas fa-list-check"></i> My Tasks
+                </a>
+
+                <a href="{% url 'bug_list' %}" class="nav-item">
+                    <i class="fas fa-bug"></i> Bug Tracking
+                </a>
+
+                <div class="nav-section-label">Leave</div>
+
+                <a href="{%url 'developer_applyleave' %}" class="nav-item">
+                    <i class="fas fa-paper-plane"></i> Apply for Leave
+                </a>
+
+                <a href="{% url 'developer_leaves' %}" class="nav-item">
+                    <i class="fas fa-clock-rotate-left"></i> Leave History
+                </a>
+
+            </nav>
+
+            <!-- Logout -->
+            <div class="sidebar-footer">
+                <a href="{% url 'login' %}" class="nav-item logout" id="logoutLink">
+                    <i class="fas fa-right-from-bracket"></i> Logout
+                </a>
+            </div>
+
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="main-content">
+
+            <!-- Top bar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>Developer Dashboard</h1>
+                    <p>Welcome back, {{employee.name}}! Here's your work overview for today.</p>
+                </div>
+            </div>
+
+            <!-- Welcome banner -->
+            <div class="welcome-banner">
+                <div class="welcome-banner-text">
+                    <h2>Good morning, {{employee.name}} 👋</h2>
+                    <p>
+                        You have <strong>{{ total_tasks }}</strong> tasks,
+                        <strong>{{ open_bugs }}</strong> open bugs,
+                        and <strong>{{ total_projects }}</strong> assigned projects.
+                    </p>
+                </div>
+                <div class="welcome-banner-meta">
+                    <div class="welcome-meta-item">
+                        <i class="fas fa-calendar-day"></i> {{ today|date:"D, d M Y" }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== STAT CARDS ========== -->
+            <div class="stats-grid">
+
+                <!-- My Projects -->
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label">
+                            <i class="fas fa-folder-open" style="color:#7c3aed;"></i>
+                            My Projects
+                        </div>
+                        <div class="stat-value">{{ total_projects }}</div>
+                        <span class="stat-trend neutral">
+                            <i class="fas fa-folder"></i> Assigned projects
+                        </span>
+                    </div>
+                    <div class="stat-icon purple">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                </div>
+
+                <!-- My Tasks -->
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label">
+                            <i class="fas fa-list-check" style="color:#2563eb;"></i>
+                            My Tasks
+                        </div>
+                        <div class="stat-value">{{ total_tasks }}</div>
+                        <span class="stat-trend neutral">
+                            <i class="fas fa-tasks"></i> Assigned tasks
+                        </span>
+                    </div>
+                    <div class="stat-icon blue">
+                        <i class="fas fa-list-check"></i>
+                    </div>
+                </div>
+
+                <!-- Open Bugs -->
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label">
+                            <i class="fas fa-bug" style="color:#dc2626;"></i>
+                            Open Bugs
+                        </div>
+                        <div class="stat-value">{{ open_bugs }}</div>
+                        <span class="stat-trend neutral">
+                            <i class="fas fa-exclamation-circle"></i> Bugs requiring attention
+                        </span>
+                    </div>
+                    <div class="stat-icon red">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                </div>
+
+                <!-- Leave Balance -->
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label">
+                            <i class="fas fa-umbrella-beach" style="color:#d97706;"></i>
+                            Leave Balance
+                        </div>
+                        <div class="stat-value">{{ leave_balance|default:0 }}</div>
+                        <span class="stat-trend neutral">
+                            <i class="fas fa-calendar-days"></i> Days available
+                        </span>
+                    </div>
+                    <div class="stat-icon amber">
+                        <i class="fas fa-umbrella-beach"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ========== CONTENT GRID ========== -->
+            <div class="content-grid">
+
+                <!-- Left Column: Projects + Tasks -->
+                <div style="display:flex; flex-direction:column; gap:1.5rem;">
+
+                    <!-- My Projects -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3>
+                                <i class="fas fa-folder-open"></i>
+                                My Projects
+                            </h3>
+                            <a href="{% url 'developer_project' %}" class="panel-link">
+                                View all
+                            </a>
+                        </div>
+                        <div class="panel-body">
+                            {% for project in projects %}
+                                <div class="project-item">
+                                    <div class="project-top">
+                                        <div class="project-name">
+                                            <i class="fas fa-folder-open"></i>
+                                            {{ project.project_name }}
+                                        </div>
+                                        <div class="project-percent">
+                                            {{ project.progress|default:0 }}%
+                                        </div>
+                                    </div>
+                                    <div class="progress-track">
+                                        <div class="progress-fill purple"
+                                             style="width: {{ project.progress|default:0 }}%;">
+                                        </div>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p style="text-align:center; padding:20px; color:#64748b;">
+                                    No projects assigned to you yet.
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- My Tasks -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3>
+                                <i class="fas fa-list-check"></i>
+                                My Tasks
+                            </h3>
+                            <a href="{% url 'developer_tasks' %}" class="panel-link">
+                                View all
+                            </a>
+                        </div>
+                        <div class="panel-body">
+                            {% for task in tasks %}
+                                <div class="task-item">
+                                    <div class="task-check {% if task.status == 'Completed' %}done{% endif %}">
+                                        {% if task.status == 'Completed' %}
+                                            <i class="fas fa-check"></i>
+                                        {% else %}
+                                            <i class="fas fa-clock"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="task-content">
+                                        <div class="task-title">
+                                            {{ task.title }}
+                                        </div>
+                                        <div class="task-meta">
+                                            <span>
+                                                <i class="fas fa-flag"></i>
+                                                {{ task.priority }}
+                                            </span>
+                                            <span>
+                                                <i class="fas fa-calendar"></i>
+                                                {% if task.deadline %}
+                                                    {{ task.deadline|date:"d M Y" }}
+                                                {% else %}
+                                                    No deadline
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="task-status">
+                                        {{ task.status }}
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p style="text-align:center; padding:20px; color:#64748b;">
+                                    No tasks assigned to you yet.
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- ========== LOGOUT CONFIRMATION MODAL ========== -->
+    <div class="logout-modal-overlay" id="logoutModalOverlay">
+        <div class="logout-modal">
+            <div class="logout-modal-icon">
+                <i class="fas fa-right-from-bracket"></i>
+            </div>
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to log out of NexusCore? You'll need to sign in again to access your dashboard.</p>
+            <div class="logout-modal-actions">
+                <button type="button" class="btn-cancel" id="cancelLogoutBtn">Cancel</button>
+                <a href="{% url 'login' %}" class="btn-confirm-logout" id="confirmLogoutBtn">
+                    Yes, Log Out
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the elements we need
+        var logoutLink = document.getElementById('logoutLink');
+        var logoutModalOverlay = document.getElementById('logoutModalOverlay');
+        var cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+
+        // When user clicks "Logout" in sidebar → show confirmation popup
+        logoutLink.addEventListener('click', function (event) {
+            event.preventDefault();
+            logoutModalOverlay.classList.add('active');
+        });
+
+        // When user clicks "Cancel" → hide the popup
+        cancelLogoutBtn.addEventListener('click', function () {
+            logoutModalOverlay.classList.remove('active');
+        });
+
+        // When user clicks the dark background → hide the popup
+        logoutModalOverlay.addEventListener('click', function (event) {
+            if (event.target === logoutModalOverlay) {
+                logoutModalOverlay.classList.remove('active');
+            }
+        });
+
+        // When user presses Escape key → hide the popup
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && logoutModalOverlay.classList.contains('active')) {
+                logoutModalOverlay.classList.remove('active');
+            }
+        });
+
+        // The "Yes, Log Out" link works automatically because it has
+        // href="{% url 'login' %}" — no extra JavaScript needed.
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Leave · NexusCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* ========== LAYOUT ========== */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-brand-icon {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 18px -4px rgba(124, 58, 237, 0.35);
+        }
+
+        .sidebar-brand-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+
+        .sidebar-brand-text span {
+            color: #a78bfa;
+        }
+
+        .sidebar-brand-tag {
+            display: block;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            font-weight: 600;
+            margin-top: 0.15rem;
+        }
+
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1.5rem;
+            margin: 0 0.75rem 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+        }
+
+        .sidebar-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-user-info {
+            overflow: hidden;
+        }
+
+        .sidebar-user-name {
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-user-role {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .nav-section-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            padding: 1rem 0.75rem 0.45rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            border-radius: 11px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.18s ease;
+            position: relative;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 0.98rem;
+            color: #94a3b8;
+            transition: color 0.18s;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: white;
+        }
+
+        .nav-item:hover i {
+            color: #a78bfa;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: white;
+            box-shadow: 0 8px 18px -8px rgba(124, 58, 237, 0.6);
+        }
+
+        .nav-item.active i {
+            color: white;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: white;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.15rem 0.45rem;
+            border-radius: 100px;
+            line-height: 1.4;
+        }
+
+        .nav-item.active .nav-badge {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+       
+
+        
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 1.5rem 2rem 3rem;
+            min-width: 0;
+        }
+
+        /* Top bar */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .topbar-left h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .topbar-left p {
+            color: #64748b;
+            font-size: 0.88rem;
+            margin-top: 0.15rem;
+        }
+
+
+        /* ========== FORM CARD ========== */
+        .form-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 26px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 24px 50px -22px rgba(0, 0, 0, 0.22);
+            padding: 2.2rem 2rem;
+            max-width: 680px;
+        }
+
+        /* Employee info strip */
+        .employee-strip {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 1.1rem 1.25rem;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 18px;
+            margin-bottom: 1.75rem;
+        }
+
+        .employee-strip-avatar {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+            box-shadow: 0 10px 20px -8px rgba(124, 58, 237, 0.5);
+        }
+
+        .employee-strip-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .employee-strip-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.15rem;
+        }
+
+
+        /* Messages */
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            margin-bottom: 1.25rem;
+            padding: 0.9rem 1.1rem;
+            background: #f5f3ff;
+            border: 1px solid #ddd6fe;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            color: #5b21b6;
+            line-height: 1.5;
+        }
+
+        .message i {
+            color: #7c3aed;
+            font-size: 0.95rem;
+            margin-top: 0.1rem;
+            flex-shrink: 0;
+        }
+
+        /* Form grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.45rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .form-group label i {
+            color: #7c3aed;
+            font-size: 0.76rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .field-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.9rem;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.7rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            font-size: 0.92rem;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #7c3aed;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-control:focus+.field-icon,
+        .input-wrapper:focus-within .field-icon {
+            color: #7c3aed;
+        }
+
+        /* Select */
+
+        select.form-control {
+            appearance: auto;
+            -webkit-appearance: auto;
+            -moz-appearance: auto;
+            width: 100%;
+            background-color: #f8fafc;
+            background-image: none;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            padding: 0.85rem 1rem;
+            padding-right: 2.5rem;
+            color: #1e293b;
+            font-size: 0.92rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+        }
+
+        select.form-control:focus {
+            outline: none;
+            border-color: #7c3aed;
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+        }
+
+        /* Space for the icon inside Leave Type dropdown */
+        #leave_type {
+            padding-left: 2.7rem ;
+        }
+
+        /* Textarea */
+        textarea.form-control {
+            resize: vertical;
+            min-height: 110px;
+            padding-left: 1rem;
+            line-height: 1.55;
+        }
+
+        /* Date input icon alignment */
+        input[type="date"].form-control {
+            padding-left: 2.7rem;
+        }
+
+        input[type="date"].form-control::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        input[type="date"].form-control::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+
+        /* Duration preview */
+        .duration-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 14px;
+            padding: 0.85rem 1.05rem;
+            margin-top: 1.25rem;
+            font-size: 0.82rem;
+            color: #075985;
+            line-height: 1.55;
+        }
+
+        .duration-note i {
+            color: #0284c7;
+            font-size: 0.95rem;
+            margin-top: 0.1rem;
+            flex-shrink: 0;
+        }
+
+        .duration-note strong {
+            font-weight: 600;
+            color: #0c4a6e;
+        }
+
+        /* Actions */
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1.75rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.6rem;
+            border-radius: 13px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: white;
+            box-shadow: 0 10px 20px -10px rgba(124, 58, 237, 0.6);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 26px -12px rgba(124, 58, 237, 0.7);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 860px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 240px;
+                padding: 1.25rem 1.25rem 2.5rem;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .dashboard-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                padding: 1rem 0;
+            }
+
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+
+            .nav-section-label {
+                width: 100%;
+                padding: 0.75rem 0.75rem 0.25rem;
+            }
+
+            .nav-item {
+                flex: 1 1 auto;
+                min-width: 140px;
+                font-size: 0.83rem;
+                padding: 0.55rem 0.7rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.25rem 1rem 2.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-item {
+                min-width: 100%;
+            }
+
+            .topbar-left h1 {
+                font-size: 1.25rem;
+            }
+
+            .form-card {
+                padding: 1.6rem 1.2rem;
+                border-radius: 22px;
+            }
+
+            .employee-strip {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.85rem;
+            }
+
+            .employee-strip-id {
+                justify-content: center;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div>
+                    <div class="sidebar-brand-text">Nexus<span>Core</span></div>
+                    <span class="sidebar-brand-tag">Developer</span>
+                </div>
+            </div>
+
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar">{{ employee.name|slice:":2"|upper }}</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name">{{ employee.name }}</div>
+                    <div class="sidebar-user-role">{{ employee.designation|default:"Developer" }}</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <div class="nav-section-label">Main</div>
+
+                <a href="{% url 'developer_dashboard' %}" class="nav-item">
+                    <i class="fas fa-house"></i> Dashboard
+                </a>
+
+                <a href="{% url 'developer_profile' %}" class="nav-item">
+                    <i class="fas fa-id-card"></i> My Profile
+                </a>
+
+                <a href="{% url 'developer_project' %}" class="nav-item">
+                    <i class="fas fa-folder-open"></i> My Projects
+                </a>
+
+                <a href="{% url 'developer_tasks'%}" class="nav-item">
+                    <i class="fas fa-list-check"></i> My Tasks
+                   
+                </a>
+
+                <a href="{% url 'bug_list' %}" class="nav-item">
+                    <i class="fas fa-bug"></i> Bug Tracking
+                    
+                </a>
+
+                <div class="nav-section-label">Leave</div>
+
+                <a href="{% url 'developer_applyleave' %}" class="nav-item active">
+                    <i class="fas fa-paper-plane"></i> Apply for Leave
+                </a>
+
+                <a href="{%url 'developer_leaves'%}" class="nav-item">
+                    <i class="fas fa-clock-rotate-left"></i> Leave History
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="main-content">
+
+            <!-- Top bar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>Apply for Leave</h1>
+                    <p>Submit a new leave request for approval.</p>
+                </div>
+                
+            </div>
+
+            <!-- ========== FORM CARD ========== -->
+            <div class="form-card">
+
+                <!-- Employee info strip -->
+                <div class="employee-strip">
+                    <div class="employee-strip-avatar">{{ employee.name|slice:":2"|upper }}</div>
+                    <div class="employee-strip-info">
+                        <div class="employee-strip-name">{{ employee.name }}</div>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                {% for message in messages %}
+                <div class="message">
+                    <i class="fas fa-circle-info"></i>
+                    <div>{{ message }}</div>
+                </div>
+                {% endfor %}
+
+                <!-- Form -->
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="form-grid">
+
+                        <!-- Leave Type -->
+                        <div class="form-group full-width">
+                            <label for="leave_type">
+                                <i class="fas fa-tag"></i> Leave Type
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-tag field-icon"></i>
+                                <select id="leave_type" name="leave_type" class="form-control" required>
+                                    <option value="">Select Leave Type</option>
+                                    <option value="Casual Leave">Casual Leave</option>
+                                    <option value="Sick Leave">Sick Leave</option>
+                                    <option value="Annual Leave">Annual Leave</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- From Date -->
+                        <div class="form-group">
+                            <label for="from_date">
+                                <i class="fas fa-calendar-day"></i> From Date
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-calendar-day field-icon"></i>
+                                <input type="date" id="from_date" name="from_date" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <!-- To Date -->
+                        <div class="form-group">
+                            <label for="to_date">
+                                <i class="fas fa-calendar-check"></i> To Date
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-calendar-check field-icon"></i>
+                                <input type="date" id="to_date" name="to_date" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <!-- Reason -->
+                        <div class="form-group full-width">
+                            <label for="reason">
+                                <i class="fas fa-pen"></i> Reason
+                            </label>
+                            <div class="input-wrapper">
+                                <textarea id="reason" name="reason" class="form-control" rows="4"
+                                    placeholder="Enter your reason for leave..." required></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Duration note -->
+                    <div class="duration-note">
+                        <i class="fas fa-circle-info"></i>
+                        <div>
+                            <strong>Note:</strong> Your leave request will be sent to your reporting manager for
+                            approval. You'll be notified once it's reviewed.
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Submit Leave Request
+                        </button>
+                        <a href="{%url 'developer_leaves'%}" class="btn btn-secondary">
+                            <i class="fas fa-clock-rotate-left"></i> View My Leave Requests
+                        </a>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

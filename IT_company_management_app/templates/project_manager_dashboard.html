@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Manager Dashboard · NexusCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* ========== TOP BAR ========== */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.1rem 2rem;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .brand-icon {
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 18px -4px rgba(13, 148, 136, 0.35);
+        }
+
+        .brand-text span {
+            color: #0d9488;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.4rem 0.85rem 0.4rem 0.45rem;
+            text-decoration: none;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.78rem;
+            flex-shrink: 0;
+        }
+
+        .user-chip-info {
+            line-height: 1.2;
+        }
+
+        .user-chip-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .user-chip-role {
+            font-size: 0.68rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .btn-logout-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-logout-top:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+            box-shadow: 0 8px 16px -8px rgba(220, 38, 38, 0.6);
+            transform: translateY(-1px);
+        }
+
+        /* ========== MAIN ========== */
+        .main {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* Welcome banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%);
+            border-radius: 22px;
+            padding: 2rem 2.2rem;
+            color: white;
+            margin-bottom: 1.75rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -20px rgba(13, 148, 136, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .welcome-banner::after {
+            content: "";
+            position: absolute;
+            right: -60px;
+            top: -60px;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .welcome-banner-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-banner h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+
+        .welcome-banner p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 520px;
+        }
+
+        .welcome-banner-meta {
+            display: flex;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .welcome-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            background: rgba(255, 255, 255, 0.14);
+            padding: 0.45rem 0.9rem;
+            border-radius: 100px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ========== STATS GRID ========== */
+        .stats-section {
+            margin-bottom: 1.75rem;
+        }
+
+        .stats-section-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            margin-bottom: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stats-section-title i {
+            color: #0d9488;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        .stats-grid.two-col {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.2);
+            padding: 1.4rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 22px 36px -18px rgba(0, 0, 0, 0.25);
+        }
+
+        .stat-info {
+            min-width: 0;
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .stat-value {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.teal { background: #f0fdfa; color: #0d9488; }
+        .stat-icon.blue { background: #eef2ff; color: #2563eb; }
+        .stat-icon.green { background: #ecfdf5; color: #059669; }
+        .stat-icon.amber { background: #fffbeb; color: #d97706; }
+
+        /* ========== QUICK ACTIONS (SEVEN) ========== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-action-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 18px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.2);
+            padding: 1.25rem 1rem;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.65rem;
+            transition: all 0.2s ease;
+        }
+
+        .quick-action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 38px -20px rgba(0, 0, 0, 0.28);
+            border-color: #cbd5e1;
+        }
+
+        .quick-action-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .quick-action-icon.teal { background: #f0fdfa; color: #0d9488; }
+        .quick-action-icon.blue { background: #eef2ff; color: #2563eb; }
+        .quick-action-icon.purple { background: #f5f3ff; color: #7c3aed; }
+        .quick-action-icon.amber { background: #fffbeb; color: #d97706; }
+        .quick-action-icon.green { background: #ecfdf5; color: #059669; }
+        .quick-action-icon.cyan { background: #ecfeff; color: #0891b2; }
+        .quick-action-icon.red { background: #fef2f2; color: #dc2626; }
+
+        .quick-action-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.3;
+        }
+
+        /* ========== LOGOUT CONFIRMATION MODAL (NEW) ========== */
+        .logout-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logout-modal-overlay.active {
+            display: flex;
+        }
+
+        .logout-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem 1.8rem 1.6rem;
+            max-width: 380px;
+            width: calc(100% - 2rem);
+            text-align: center;
+            box-shadow: 0 40px 60px -20px rgba(0, 0, 0, 0.4);
+        }
+
+        .logout-modal-icon {
+            width: 64px;
+            height: 64px;
+            background: #f0fdfa;
+            color: #0d9488;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1.2rem;
+        }
+
+        .logout-modal h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .logout-modal p {
+            font-size: 0.88rem;
+            color: #64748b;
+            margin-bottom: 1.6rem;
+            line-height: 1.5;
+        }
+
+        .logout-modal-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .logout-modal-actions button,
+        .logout-modal-actions a {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.18s;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0 !important;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .btn-confirm-logout {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            box-shadow: 0 8px 18px -8px rgba(220, 38, 38, 0.5);
+        }
+
+        .btn-confirm-logout:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 22px -10px rgba(220, 38, 38, 0.7);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1200px) {
+            .quick-actions {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 680px) {
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .brand {
+                font-size: 1.1rem;
+            }
+
+            .brand-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1.05rem;
+            }
+
+            .user-chip-info {
+                display: none;
+            }
+
+            .btn-logout-top span {
+                display: none;
+            }
+
+            .btn-logout-top {
+                padding: 0.6rem 0.75rem;
+            }
+
+            .main {
+                padding: 2rem 1rem 3rem;
+            }
+
+            .welcome-banner {
+                padding: 1.5rem 1.4rem;
+            }
+
+            .welcome-banner h2 {
+                font-size: 1.25rem;
+            }
+
+            .stats-grid,
+            .stats-grid.two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========== TOP BAR ========== -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-diagram-project"></i>
+            </div>
+            <div class="brand-text">Nexus<span>Core</span></div>
+        </div>
+
+        <div class="topbar-actions">
+
+            <div class="user-chip">
+                <div class="user-avatar">{{ manager.name|slice:":2"|upper }}</div>
+                <div class="user-chip-info">
+                    <div class="user-chip-name">{{ manager.name }}</div>
+                    <div class="user-chip-role">{{ manager.get_role_display|default:"Project Manager" }}</div>
+                </div>
+            </div>
+
+            <!-- NEW: added id="pmLogoutBtn" to trigger popup -->
+            <a href="{% url 'login' %}" class="btn-logout-top" id="pmLogoutBtn">
+                <i class="fas fa-right-from-bracket"></i> <span>Logout</span>
+            </a>
+
+        </div>
+
+    </header>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main">
+
+        <!-- Welcome banner -->
+        <div class="welcome-banner">
+            <div class="welcome-banner-text">
+                <h2>Welcome, {{ manager.name }} 👋</h2>
+                <p>Here's an overview of your projects and tasks. Manage everything from a single dashboard.</p>
+            </div>
+            <div class="welcome-banner-meta">
+                <div class="welcome-meta-item">
+                    <i class="fas fa-user-tie"></i> {{ manager.get_role_display }}
+                </div>
+                <div class="welcome-meta-item">
+                    <i class="fas fa-calendar-day"></i> {{ today|date:"D, d M Y" }}
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== PROJECT SUMMARY ========== -->
+        <div class="stats-section">
+            <div class="stats-section-title">
+                <i class="fas fa-folder-open"></i> Project Summary
+            </div>
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label"><i class="fas fa-layer-group" style="color:#0d9488;"></i> Total Projects</div>
+                        <div class="stat-value">{{ total_projects }}</div>
+                    </div>
+                    <div class="stat-icon teal"><i class="fas fa-layer-group"></i></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label"><i class="fas fa-spinner" style="color:#2563eb;"></i> Active Projects</div>
+                        <div class="stat-value">{{ active_projects }}</div>
+                    </div>
+                    <div class="stat-icon blue"><i class="fas fa-spinner"></i></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label"><i class="fas fa-circle-check" style="color:#059669;"></i> Completed Projects</div>
+                        <div class="stat-value">{{ completed_projects }}</div>
+                    </div>
+                    <div class="stat-icon green"><i class="fas fa-circle-check"></i></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========== TASK SUMMARY ========== -->
+        <div class="stats-section">
+            <div class="stats-section-title">
+                <i class="fas fa-list-check"></i> Task Summary
+            </div>
+            <div class="stats-grid two-col">
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label"><i class="fas fa-clipboard-list" style="color:#0d9488;"></i> Total Tasks</div>
+                        <div class="stat-value">{{ total_tasks }}</div>
+                    </div>
+                    <div class="stat-icon teal"><i class="fas fa-clipboard-list"></i></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label"><i class="fas fa-hourglass-half" style="color:#d97706;"></i> Pending Tasks</div>
+                        <div class="stat-value">{{ pending_tasks }}</div>
+                    </div>
+                    <div class="stat-icon amber"><i class="fas fa-hourglass-half"></i></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========== QUICK ACTIONS (SEVEN) ========== -->
+        <div class="stats-section">
+            <div class="stats-section-title">
+                <i class="fas fa-bolt"></i> Quick Actions
+            </div>
+            <div class="quick-actions">
+
+                <!-- 1. Create New Project -->
+                <a href="{% url 'create_project' %}" class="quick-action-card">
+                    <div class="quick-action-icon teal"><i class="fas fa-plus"></i></div>
+                    <span class="quick-action-label">Create New Project</span>
+                </a>
+
+                <!-- 2. View My Projects -->
+                <a href="{% url 'my_projects' %}" class="quick-action-card">
+                    <div class="quick-action-icon blue"><i class="fas fa-folder-open"></i></div>
+                    <span class="quick-action-label">View My Projects</span>
+                </a>
+
+                <!-- 3. Task Management -->
+                <a href="{% url 'manage_tasks' %}" class="quick-action-card">
+                    <div class="quick-action-icon cyan"><i class="fas fa-list-check"></i></div>
+                    <span class="quick-action-label">Task Management</span>
+                </a>
+
+                <!-- 4. Report Bug -->
+                <a href="{% url 'project_manager_report_bug' %}" class="quick-action-card">
+                    <div class="quick-action-icon red"><i class="fas fa-bug"></i></div>
+                    <span class="quick-action-label">Report Bug</span>
+                </a>
+
+                <!-- 5. My Profile -->
+                <a href="{% url 'project_manager_profile' %}" class="quick-action-card">
+                    <div class="quick-action-icon purple"><i class="fas fa-id-card"></i></div>
+                    <span class="quick-action-label">My Profile</span>
+                </a>
+
+                <!-- 6. Apply for Leave -->
+                <a href="{% url 'project_manager_apply_leave' %}" class="quick-action-card">
+                    <div class="quick-action-icon amber"><i class="fas fa-paper-plane"></i></div>
+                    <span class="quick-action-label">Apply for Leave</span>
+                </a>
+
+                <!-- 7. My Leave Requests -->
+                <a href="{% url 'project_manager_leaves' %}" class="quick-action-card">
+                    <div class="quick-action-icon green"><i class="fas fa-clock-rotate-left"></i></div>
+                    <span class="quick-action-label">My Leave Requests</span>
+                </a>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ========== LOGOUT CONFIRMATION MODAL (NEW) ========== -->
+    <div class="logout-modal-overlay" id="logoutModalOverlay">
+        <div class="logout-modal">
+            <div class="logout-modal-icon">
+                <i class="fas fa-right-from-bracket"></i>
+            </div>
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to log out of NexusCore? You'll need to sign in again to access the Project Manager dashboard.</p>
+            <div class="logout-modal-actions">
+                <button type="button" class="btn-cancel" id="cancelLogoutBtn">Cancel</button>
+                <a href="{% url 'login' %}" class="btn-confirm-logout" id="confirmLogoutBtn">
+                    Yes, Log Out
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== LOGOUT CONFIRMATION SCRIPT (NEW) ========== -->
+    <script>
+        // Get the elements
+        var pmLogoutBtn = document.getElementById('pmLogoutBtn');
+        var logoutModalOverlay = document.getElementById('logoutModalOverlay');
+        var cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+
+        // When user clicks "Logout" in top bar → show confirmation popup
+        pmLogoutBtn.addEventListener('click', function (event) {
+            event.preventDefault();
+            logoutModalOverlay.classList.add('active');
+        });
+
+        // When user clicks "Cancel" → hide popup
+        cancelLogoutBtn.addEventListener('click', function () {
+            logoutModalOverlay.classList.remove('active');
+        });
+
+        // When user clicks the dark background → hide popup
+        logoutModalOverlay.addEventListener('click', function (event) {
+            if (event.target === logoutModalOverlay) {
+                logoutModalOverlay.classList.remove('active');
+            }
+        });
+
+        // When user presses Escape → hide popup
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && logoutModalOverlay.classList.contains('active')) {
+                logoutModalOverlay.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

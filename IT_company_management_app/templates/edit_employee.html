@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee · NexusCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* ========== LAYOUT ========== */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            margin-left: 270px;
+            padding: 1.5rem 2rem 3rem;
+            min-width: 0;
+        }
+
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 0.4rem 0.9rem 0.4rem 0.45rem;
+            text-decoration: none;
+            transition: all 0.18s;
+            cursor: pointer;
+        }
+
+        .admin-profile:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .admin-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .admin-profile-info {
+            line-height: 1.25;
+        }
+
+        .admin-profile-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .admin-profile-role {
+            font-size: 0.7rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+
+        /* ---- Page header ---- */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .page-header-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .page-header h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .page-header-sub {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 0.1rem;
+        }
+
+        /* ---- Form panel ---- */
+        .form-panel {
+            background: white;
+            border-radius: 22px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 22px -14px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 860px;
+        }
+
+        .form-panel-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .form-panel-header i {
+            color: #2563eb;
+            font-size: 0.95rem;
+        }
+
+        .form-panel-header h3 {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .form-body {
+            padding: 1.75rem;
+        }
+
+        /* ---- Form grid ---- */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.35rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.83rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.45rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .form-group label i {
+            color: #2563eb;
+            font-size: 0.78rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .field-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.9rem;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.7rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            font-size: 0.92rem;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-control:focus+.field-icon,
+        .input-wrapper:focus-within .field-icon {
+            color: #2563eb;
+        }
+
+        /* Select styling */
+        select.form-control {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 3rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            font-size: 0.92rem;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            cursor: pointer;
+        }
+
+        select.form-control:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        /* ---- Divider ---- */
+        .form-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.75rem 0 1.35rem;
+            color: #94a3b8;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .form-divider::before,
+        .form-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        /* ---- Actions ---- */
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            padding: 0.8rem 1.6rem;
+            border-radius: 13px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            box-shadow: 0 10px 18px -8px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px -8px rgba(37, 99, 235, 0.65);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+
+        .btn-danger {
+            background: white;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            margin-left: auto;
+        }
+
+        .btn-danger:hover {
+            background: #fef2f2;
+            border-color: #f87171;
+            color: #b91c1c;
+        }
+
+        /* ---- Info note ---- */
+        .info-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 14px;
+            padding: 0.9rem 1.1rem;
+            margin-top: 1.5rem;
+            font-size: 0.83rem;
+            color: #075985;
+            line-height: 1.55;
+            max-width: 860px;
+        }
+
+        .info-note i {
+            color: #0284c7;
+            font-size: 1rem;
+            margin-top: 0.1rem;
+            flex-shrink: 0;
+        }
+
+        .info-note strong {
+            font-weight: 600;
+            color: #0c4a6e;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 860px) {
+
+
+            .main-content {
+                margin-left: 240px;
+                padding: 1.25rem 1.25rem 2.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.25rem 1rem 2.5rem;
+            }
+
+            .form-body {
+                padding: 1.25rem;
+            }
+
+            .form-panel-header {
+                padding: 1.1rem 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .admin-profile-info {
+                display: none;
+            }
+
+            .page-header h2 {
+                font-size: 1.15rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .btn-danger {
+                margin-left: 0;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-layout">
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="main-content">
+            <!-- Page header -->
+            <div class="page-header">
+                <div class="page-header-icon">
+                    <i class="fas fa-user-pen"></i>
+                </div>
+                <div>
+                    <h2>Edit Employee</h2>
+                    <div class="page-header-sub">Update the employee's personal and role information.</div>
+                </div>
+            </div>
+
+            <!-- Form panel -->
+            <div class="form-panel">
+
+                <div class="form-panel-header">
+                    <i class="fas fa-id-card"></i>
+                    <h3>Employee Information</h3>
+                </div>
+
+                <div class="form-body">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <!-- Personal info -->
+                        <div class="form-grid">
+
+                            <!-- Name -->
+                            <div class="form-group full-width">
+                                <label for="name">
+                                    <i class="fas fa-user"></i> Name
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-user field-icon"></i>
+                                    <input type="text" id="name" name="name" class="form-control"
+                                        value="{{ employee.name }}" placeholder="Enter full name" required>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label for="email">
+                                    <i class="fas fa-envelope"></i> Email
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-envelope field-icon"></i>
+                                    <input type="email" id="email" name="email" class="form-control"
+                                        value="{{ employee.email }}" placeholder="name@company.com" required>
+                                </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="form-group">
+                                <label for="phone">
+                                    <i class="fas fa-phone"></i> Phone
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-phone field-icon"></i>
+                                    <input type="text" id="phone" name="phone" class="form-control"
+                                        value="{{ employee.phone }}" placeholder="+91 98765 43210">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="form-divider">Role &amp; Position</div>
+
+                        <!-- Role info -->
+                        <div class="form-grid">
+
+                            <!-- Role -->
+                            <div class="form-group">
+                                <label for="role">
+                                    <i class="fas fa-user-shield"></i> Role
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-user-shield field-icon"></i>
+                                    <select id="role" name="role" class="form-control">
+                                        <option value="employee" {% if employee.role == 'employee' %}selected{% endif %}>
+                                            Employee</option>
+                                        <option value="developer" {% if employee.role == 'developer' %}selected{% endif%}>
+                                            Developer</option>
+                                        <option value="hr" {% if employee.role == 'hr' %}selected{% endif %}>HR</option>
+                                        <option value="project_manager" {% if employee.role == 'project_manager'%}selected{% endif %}>Project Manager</option>
+                                        <option value="sales" {% if employee.role == 'sales' %}selected{% endif %}>Sales
+                                            Executive</option>
+                                        <option value="accountant" {% if employee.role == 'accountant' %}selected{%endif%}>Accountant</option>
+                                        <option value="support" {% if employee.role == 'support' %}selected{% endif %}>
+                                            Support Executive</option>
+                                        <option value="super_admin" {% if employee.role == 'super_admin' %}selected{%endif %}>Super Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Designation -->
+                            <div class="form-group">
+                                <label for="designation">
+                                    <i class="fas fa-briefcase"></i> Designation
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-briefcase field-icon"></i>
+                                    <input type="text" id="designation" name="designation" class="form-control"
+                                        value="{{ employee.designation|default:''}}"
+                                        placeholder="e.g. Senior Software Engineer">
+                                </div>
+                            </div>
+
+                            <!-- Employee ID -->
+                            <div class="form-group">
+                                <label for="employee_id">
+                                    <i class="fas fa-id-badge"></i> Employee ID
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-id-badge field-icon"></i>
+                                    <input type="text" id="employee_id" name="employee_id" class="form-control"
+                                        value="{{ employee.employee_id|default:'' }}" placeholder="e.g. EMP001">
+                                </div>
+                            </div>
+
+                            <!-- Department -->
+                            <div class="form-group">
+                                <label for="department">
+                                    <i class="fas fa-building"></i> Department
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-building field-icon"></i>
+                                    <input type="text" id="department" name="department" class="form-control"
+                                        value="{{ employee.department|default:'' }}"
+                                        placeholder="e.g. Python Development">
+                                </div>
+                            </div>
+
+                            <!-- Joining Date -->
+                            <div class="form-group">
+                                <label for="joining_date">
+                                    <i class="fas fa-calendar-alt"></i> Joining Date
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="date" id="joining_date" name="joining_date" class="form-control"
+                                        value="{{ employee.joining_date|date:'Y-m-d' }}">
+                                </div>
+                            </div>
+
+                            <!-- Skills -->
+                            <div class="form-group full-width">
+                                <label for="skills">
+                                    <i class="fas fa-laptop-code"></i> Skills
+                                </label>
+                                <div class="input-wrapper">
+                                    <textarea id="skills" name="skills" class="form-control" rows="3"
+                                        style="padding-left: 1rem;"
+                                        placeholder="Python, Django, SQL, HTML, CSS">{{ employee.skills|default:'' }}</textarea>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Info note -->
+                        <div class="info-note">
+                            <i class="fas fa-circle-info"></i>
+                            <div>
+                                <strong>Note:</strong> Changing an employee's role will immediately update their access
+                                permissions across the platform. Assign privileged roles (Project Manager, Super Admin)
+                                with care.
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="form-actions">
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-floppy-disk"></i> Update Employee
+                            </button>
+
+                            <a href="{%url 'employees'%}" class="btn btn-secondary">
+                                <i class="fas fa-xmark"></i> Cancel
+                            </a>
+                            <a href="{% url 'delete_employee' employee.id %}" class="btn btn-danger"
+                                onclick="return confirm('Are you sure you want to delete this employee?');">
+                                <i class="fas fa-trash-can"></i>
+                                Delete
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

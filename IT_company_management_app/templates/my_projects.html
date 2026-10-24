@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects · NexusCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* ========== TOP BAR ========== */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.1rem 2rem;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .brand-icon {
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 18px -4px rgba(13, 148, 136, 0.35);
+        }
+
+        .brand-text span {
+            color: #0d9488;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.4rem 0.85rem 0.4rem 0.45rem;
+            text-decoration: none;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.78rem;
+            flex-shrink: 0;
+        }
+
+        .user-chip-info {
+            line-height: 1.2;
+        }
+
+        .user-chip-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .user-chip-role {
+            font-size: 0.68rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .btn-logout-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-logout-top:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+            box-shadow: 0 8px 16px -8px rgba(220, 38, 38, 0.6);
+            transform: translateY(-1px);
+        }
+
+        /* ========== MAIN ========== */
+        .main {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* Page header */
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .page-header-left h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            margin-bottom: 0.3rem;
+        }
+
+        .page-header-left p {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+
+        .page-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb a {
+            color: #0d9488;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.78rem 1.6rem;
+            border-radius: 13px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0d9488, #0f766e);
+            color: white;
+            box-shadow: 0 10px 20px -10px rgba(13, 148, 136, 0.6);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 26px -12px rgba(13, 148, 136, 0.7);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+            transform: translateY(-1px);
+        }
+
+        /* ========== PROJECT GRID ========== */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 22px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.2);
+            padding: 1.6rem 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 38px -20px rgba(0, 0, 0, 0.28);
+            border-color: #cbd5e1;
+        }
+
+        /* Card top */
+        .project-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #f0fdfa;
+            color: #0d9488;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.3rem 0.75rem;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+
+        .status-badge i {
+            font-size: 0.65rem;
+        }
+
+        .status-badge.active,
+        .status-badge.in-progress {
+            background: #eef2ff;
+            color: #2563eb;
+        }
+
+        .status-badge.completed {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .status-badge.on-hold,
+        .status-badge.pending {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .status-badge.cancelled {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        /* Title */
+        .project-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+            margin-bottom: 1.1rem;
+        }
+
+        /* Detail rows */
+        .project-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .project-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.83rem;
+        }
+
+        .project-detail-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #0d9488;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .project-detail-label {
+            color: #94a3b8;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .project-detail-value {
+            color: #1e293b;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Developers section */
+        .developers-section {
+            padding-top: 1.1rem;
+            border-top: 1px solid #f1f5f9;
+            margin-bottom: 1.1rem;
+        }
+
+        .developers-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #94a3b8;
+            margin-bottom: 0.65rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .developers-label i {
+            color: #0d9488;
+            font-size: 0.75rem;
+        }
+
+        .developer-avatars {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+        }
+
+        .developer-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            margin-left: -6px;
+        }
+
+        .developer-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .no-developers {
+            font-size: 0.82rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        /* Progress */
+        .project-progress {
+            margin-top: auto;
+            padding-top: 1.1rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .progress-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-value {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #0d9488;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 100px;
+            overflow: hidden;
+            margin-bottom: 1.1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0d9488, #14b8a6);
+            border-radius: 100px;
+        }
+
+        /* Edit button */
+        .btn-edit-project {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            width: 100%;
+            padding: 0.68rem;
+            border-radius: 11px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: #f0fdfa;
+            color: #0d9488;
+            border: 1px solid #99f6e4;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.18s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-edit-project:hover {
+            background: #0d9488;
+            color: white;
+            border-color: #0d9488;
+            box-shadow: 0 8px 16px -8px rgba(13, 148, 136, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .btn-edit-project i {
+            font-size: 0.75rem;
+        }
+
+        /* Empty state */
+        .empty-state {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 24px 50px -22px rgba(0, 0, 0, 0.22);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            background: #f0fdfa;
+            color: #0d9488;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+            color: #64748b;
+            max-width: 360px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 560px) {
+            .topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .brand {
+                font-size: 1.1rem;
+            }
+
+            .brand-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1.05rem;
+            }
+
+            .user-chip-info {
+                display: none;
+            }
+            .main {
+                padding: 2rem 1rem 3rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .page-header-left h1 {
+                font-size: 1.4rem;
+            }
+
+            .page-header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========== TOP BAR ========== -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-diagram-project"></i>
+            </div>
+            <div class="brand-text">Nexus<span>Core</span></div>
+        </div>
+
+        <div class="topbar-actions">
+
+            <div class="user-chip">
+                <div class="user-avatar">{{ manager.name|slice:":2"|upper }}</div>
+                <div class="user-chip-info">
+                    <div class="user-chip-name">{{ manager.name }}</div>
+                    <div class="user-chip-role">{{ manager.get_role_display|default:"Project Manager" }}</div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="{% url 'project_manager_dashboard' %}">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Page header -->
+        <div class="page-header">
+            <div class="page-header-left">
+                <h1>My Projects</h1>
+                <p>View and manage all projects assigned to you.</p>
+            </div>
+
+            <div class="page-header-actions">
+                <a href="{% url 'create_project' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New Project
+                </a>
+            </div>
+        </div>
+
+        <!-- ========== PROJECT GRID ========== -->
+        {% if projects %}
+        <div class="project-grid">
+
+            {% for project in projects %}
+            <div class="project-card">
+
+                <!-- Card top -->
+                <div class="project-card-top">
+                    <div class="project-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <span class="status-badge {{ project.status|lower }}">
+                        {% if project.status == 'Completed' %}
+                        <i class="fas fa-circle-check"></i>
+                        {% elif project.status == 'On Hold' %}
+                        <i class="fas fa-pause-circle"></i>
+                        {% elif project.status == 'Cancelled' %}
+                        <i class="fas fa-circle-xmark"></i>
+                        {% else %}
+                        <i class="fas fa-spinner"></i>
+                        {% endif %}
+                        {{ project.get_status_display }}
+                    </span>
+                </div>
+
+                <!-- Title -->
+                <h3 class="project-title">{{ project.project_name }}</h3>
+
+                <!-- Details -->
+                <div class="project-details">
+
+                    <div class="project-detail">
+                        <div class="project-detail-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <span class="project-detail-label">Client:</span>
+                        <span class="project-detail-value">{{ project.client.company_name }}</span>
+                    </div>
+
+                    <div class="project-detail">
+                        <div class="project-detail-icon">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <span class="project-detail-label">Start:</span>
+                        <span class="project-detail-value">{{ project.start_date }}</span>
+                    </div>
+
+                    <div class="project-detail">
+                        <div class="project-detail-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <span class="project-detail-label">Deadline:</span>
+                        <span class="project-detail-value">{{ project.deadline }}</span>
+                    </div>
+
+                </div>
+
+                <!-- Developers -->
+                <div class="developers-section">
+                    <div class="developers-label">
+                        <i class="fas fa-code"></i> Assigned Developers
+                    </div>
+                    <div class="developer-avatars">
+                        {% for developer in project.assigned_developers.all %}
+                        <div class="developer-avatar" title="{{ developer.name }}">
+                            {{ developer.name|slice:":2"|upper }}
+                        </div>
+                        {% empty %}
+                        <span class="no-developers">No developers assigned.</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Progress -->
+                <div class="project-progress">
+                    <div class="progress-header">
+                        <span class="progress-label">Progress</span>
+                        <span class="progress-value">{{ project.progress }}%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: {{ project.progress }}%;"></div>
+                    </div>
+
+                    <a href="{% url 'edit_project' project.id %}" class="btn-edit-project">
+                        <i class="fas fa-pen"></i> Edit Project
+                    </a>
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <!-- Empty state -->
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-folder-plus"></i>
+            </div>
+            <h3>No projects found</h3>
+            <p>You haven't created any projects yet. Get started by creating your first project.</p>
+            <a href="{% url 'create_project' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create Your First Project
+            </a>
+        </div>
+
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard · NexusCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* ========== TOP BAR ========== */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.1rem 2rem;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .brand-icon {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 18px -4px rgba(37, 99, 235, 0.35);
+        }
+
+        .brand-text span {
+            color: #2563eb;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+
+        .btn-logout-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-logout-top:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+            box-shadow: 0 8px 16px -8px rgba(220, 38, 38, 0.6);
+            transform: translateY(-1px);
+        }
+
+        /* ========== MAIN ========== */
+        .main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+        }
+
+        /* Welcome message */
+        .welcome {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .welcome h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            margin-bottom: 0.4rem;
+        }
+
+        .welcome p {
+            font-size: 1rem;
+            color: #64748b;
+        }
+
+        /* ========== PROFILE CARD ========== */
+        .profile-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(14px);
+            border-radius: 26px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 24px 50px -22px rgba(0, 0, 0, 0.22);
+            padding: 2.2rem 2rem;
+        }
+
+        .profile-top {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding-bottom: 1.6rem;
+            border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 1.6rem;
+        }
+
+        .profile-avatar {
+            width: 76px;
+            height: 76px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            box-shadow: 0 12px 24px -10px rgba(37, 99, 235, 0.5);
+        }
+
+        .profile-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-role {
+            font-size: 0.92rem;
+            color: #64748b;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .profile-role i {
+            color: #2563eb;
+            font-size: 0.8rem;
+        }
+
+        /* Detail rows */
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.85rem 1rem;
+            border-radius: 14px;
+            transition: background 0.15s;
+        }
+
+        .detail-row:hover {
+            background: #f8fafc;
+        }
+
+        .detail-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #eef2ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .detail-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .detail-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            font-weight: 700;
+            margin-bottom: 0.15rem;
+        }
+
+        .detail-value {
+            font-size: 0.92rem;
+            color: #1e293b;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        /* Edit Profile button */
+        .card-actions {
+            margin-top: 1.6rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .btn-edit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 13px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px -10px rgba(37, 99, 235, 0.6);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 26px -12px rgba(37, 99, 235, 0.7);
+        }
+
+        .btn-edit:active {
+            transform: translateY(0);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 560px) {
+            .topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .brand {
+                font-size: 1.1rem;
+            }
+
+            .brand-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1.05rem;
+            }
+
+            .btn-logout-top span {
+                display: none;
+            }
+
+            .btn-logout-top {
+                padding: 0.6rem 0.75rem;
+            }
+
+            .main {
+                padding: 2rem 1rem 3rem;
+            }
+
+            .welcome h1 {
+                font-size: 1.55rem;
+            }
+
+            .profile-card {
+                padding: 1.6rem 1.2rem;
+                border-radius: 22px;
+            }
+
+            .profile-top {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .profile-role {
+                justify-content: center;
+            }
+
+            .btn-edit {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========== TOP BAR ========== -->
+    <header class="topbar">
+
+        <!-- Company name -->
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-cubes"></i>
+            </div>
+            <div class="brand-text">Nexus<span>Core</span></div>
+        </div>
+
+        <!-- Notification + Logout -->
+        <div class="topbar-actions">
+
+
+            <a href="{%url 'login'%}" class="btn-logout-top">
+                <i class="fas fa-right-from-bracket"></i> <span>Logout</span>
+            </a>
+
+        </div>
+
+    </header>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main">
+
+        <!-- Welcome message -->
+        <div class="welcome">
+            <h1>Welcome, {{ employee.name }} 👋</h1>
+            <p>Here's a quick look at your profile.</p>
+        </div>
+
+        <!-- Profile card -->
+        <div class="profile-card">
+
+            <!-- Avatar + name + role -->
+            <div class="profile-top">
+                <div class="profile-avatar">{{ employee.name|slice:":2"|upper }}</div>
+                <div>
+                    <div class="profile-name">{{ employee.name }}</div>
+                    <div class="profile-role">
+                        {% if employee.is_active %}
+                        <i class="fas fa-circle-check"></i>
+                        Active Employee
+                        {% else %}
+                        <i class="fas fa-circle-xmark"></i>
+                        Inactive Employee
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details: Name, Email, Employee ID, Joining Date -->
+            <div class="profile-details">
+
+                <div class="detail-row">
+                    <div class="detail-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-label">Name</div>
+                        <div class="detail-value">
+                            {{ employee.name }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-label">Email</div>
+                        <div class="detail-value">
+                            {{ employee.email }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon">
+                        <i class="fas fa-id-badge"></i>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-label">Username</div>
+                        <div class="detail-value">
+                            {{ employee.username }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-label">Designation</div>
+                        <div class="detail-value">
+                            {{ employee.designation|default:"Not assigned" }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon">
+                        <i class="fas fa-user-tag"></i>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-label">Role</div>
+                        <div class="detail-value">
+                            {{ employee.get_role_display }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-label">Phone</div>
+                        <div class="detail-value">
+                            {{ employee.phone }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Edit Profile button -->
+            <div class="card-actions">
+                <a href="{% url 'edit_profile' employee.id%}" class="btn-edit">
+                    <i class="fas fa-user-pen"></i> Edit Profile
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Requests · NexusCore</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background:
+                linear-gradient(135deg, rgba(241,245,249,.94), rgba(226,232,240,.90)),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Top navigation */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.1rem 2rem;
+            background: rgba(255,255,255,.97);
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 4px 16px -8px rgba(0,0,0,.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -.02em;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            background: linear-gradient(135deg, #059669, #10b981);
+            box-shadow: 0 8px 18px -4px rgba(5,150,105,.35);
+        }
+
+        .brand-text span {
+            color: #059669;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .4rem .85rem .4rem .45rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+            text-decoration: none;
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: .8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+
+        .user-chip-name {
+            color: #0f172a;
+            font-size: .82rem;
+            font-weight: 600;
+        }
+
+        .user-chip-role {
+            color: #64748b;
+            font-size: .68rem;
+        }
+
+        .btn-logout-top {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .65rem 1rem;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            background: #fef2f2;
+            color: #dc2626;
+            font-size: .85rem;
+            font-weight: 600;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-logout-top:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* Main content */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* Page header */
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .page-header-left h1 {
+            margin-bottom: .3rem;
+            color: #0f172a;
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -.03em;
+        }
+
+        .page-header-left p {
+            color: #64748b;
+            font-size: .95rem;
+        }
+
+        .page-header-actions {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            padding: .78rem 1.6rem;
+            border: 1px solid transparent;
+            border-radius: 13px;
+            font-family: inherit;
+            font-size: .9rem;
+            font-weight: 600;
+            text-decoration: none;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            box-shadow: 0 10px 20px -10px rgba(5,150,105,.6);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 26px -12px rgba(5,150,105,.7);
+        }
+
+        .btn-secondary {
+            background: white;
+            border-color: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+            transform: translateY(-1px);
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 1.25rem;
+        }
+
+        .message {
+            margin-bottom: .6rem;
+            padding: .9rem 1rem;
+            border-radius: 10px;
+            font-size: .88rem;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .message.warning {
+            background: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+
+        .message.info {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Table card */
+        .table-card {
+            overflow: hidden;
+            border: 1px solid rgba(226,232,240,.9);
+            border-radius: 24px;
+            background: rgba(255,255,255,.98);
+            box-shadow: 0 24px 50px -22px rgba(0,0,0,.22);
+        }
+
+        .table-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 1.35rem 1.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .table-card-header h3 {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .table-card-header h3 i {
+            color: #059669;
+        }
+
+        .record-count {
+            padding: .2rem .65rem;
+            border-radius: 100px;
+            background: #ecfdf5;
+            color: #059669;
+            font-size: .75rem;
+            font-weight: 600;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1100px;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            padding: .95rem 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: .7rem;
+            font-weight: 700;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+            font-size: .84rem;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: #fafafa;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .employee-cell {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            min-width: 150px;
+        }
+
+        .employee-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            font-size: .78rem;
+            font-weight: 700;
+        }
+
+        .employee-name {
+            color: #0f172a;
+            font-size: .85rem;
+            font-weight: 600;
+        }
+
+        .leave-type {
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .leave-type-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .date-cell {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            color: #475569;
+            font-size: .82rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .date-cell i {
+            color: #94a3b8;
+            font-size: .75rem;
+        }
+
+        .reason-cell {
+            max-width: 190px;
+            overflow-wrap: anywhere;
+            color: #64748b;
+            font-size: .82rem;
+            line-height: 1.5;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .32rem .7rem;
+            border-radius: 100px;
+            font-size: .73rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-badge.pending {
+            background: #fffbeb;
+            color: #b45309;
+        }
+
+        .status-badge.approved {
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .status-badge.rejected {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        /* Approve and reject buttons */
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+        }
+
+        .btn-approve,
+        .btn-reject {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .35rem;
+            padding: .55rem .7rem;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: .76rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .btn-approve {
+            background: #d1fae5;
+            border-color: #a7f3d0;
+            color: #065f46;
+        }
+
+        .btn-approve:hover {
+            background: #059669;
+            color: white;
+        }
+
+        .btn-reject {
+            background: #fee2e2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+
+        .btn-reject:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .reviewed-text {
+            color: #64748b;
+            font-size: .8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Empty state */
+        .empty-state {
+            padding: 3.5rem 1.5rem;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1.25rem;
+            border-radius: 22px;
+            background: #ecfdf5;
+            color: #059669;
+            font-size: 1.8rem;
+        }
+
+        .empty-state h4 {
+            margin-bottom: .4rem;
+            color: #0f172a;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            max-width: 350px;
+            margin: 0 auto;
+            color: #64748b;
+            font-size: .88rem;
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                padding: .9rem 1rem;
+            }
+
+            .brand {
+                font-size: 1.1rem;
+            }
+
+            .user-chip-info {
+                display: none;
+            }
+
+
+            .main {
+                padding: 2rem 1rem 3rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .page-header-left h1 {
+                font-size: 1.4rem;
+            }
+
+            .page-header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .table-card {
+                border-radius: 16px;
+            }
+
+            .table-card-header {
+                padding: 1.1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top navigation -->
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-cubes"></i>
+            </div>
+            <div class="brand-text">Nexus<span>Core</span></div>
+        </div>
+
+        <div class="topbar-actions">
+            <div class="user-chip">
+                <div class="user-avatar">
+                    {{ employee.name|slice:":2"|upper }}
+                </div>
+                <div class="user-chip-info">
+                    <div class="user-chip-name">{{ employee.name }}</div>
+                    <div class="user-chip-role">
+                        {{ employee.role| upper}}
+                    </div>
+                </div>
+            </div>
+
+            </a>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <div class="page-header-left">
+                <h1>Leave Requests</h1>
+                <p>View employee leave applications and manage their approval status.</p>
+            </div>
+
+            <!-- Page header actions -->
+            <div class="page-header-actions">
+                <a href="{% url 'hr_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-house"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Django success/error messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <section class="table-card">
+
+            <div class="table-card-header">
+                <h3>
+                    <i class="fas fa-calendar-check"></i>
+                    All Leave Applications
+                    <span class="record-count">
+                        {{ leave_requests|length }}
+                        record{{ leave_requests|length|pluralize }}
+                    </span>
+                </h3>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Leave Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for leave in leave_requests %}
+                        <tr>
+                            <!-- Employee -->
+                            <td>
+                                <div class="employee-cell">
+                                    <div class="employee-avatar">
+                                        {{ leave.employee.name|slice:":2"|upper }}
+                                    </div>
+                                    <span class="employee-name">
+                                        {{ leave.employee.name }}
+                                    </span>
+                                </div>
+                            </td>
+
+                            <!-- Leave type -->
+                            <td>
+                                <div class="leave-type">
+                                    <div class="leave-type-icon">
+                                        <i class="fas fa-umbrella-beach"></i>
+                                    </div>
+                                    {{ leave.leave_type }}
+                                </div>
+                            </td>
+
+                            <!-- Start date -->
+                            <td>
+                                <div class="date-cell">
+                                    <i class="fas fa-calendar-day"></i>
+                                    {{ leave.from_date|date:"d M Y" }}
+                                </div>
+                            </td>
+
+                            <!-- End date -->
+                            <td>
+                                <div class="date-cell">
+                                    <i class="fas fa-calendar-check"></i>
+                                    {{ leave.to_date|date:"d M Y" }}
+                                </div>
+                            </td>
+
+                            <!-- Reason -->
+                            <td>
+                                <div class="reason-cell">
+                                    {{ leave.reason|default:"No reason provided" }}
+                                </div>
+                            </td>
+
+                            <!-- Status -->
+                            <td>
+                                <span class="status-badge {{ leave.status|lower }}">
+                                    {% if leave.status == "Approved" %}
+                                        <i class="fas fa-circle-check"></i>
+                                    {% elif leave.status == "Rejected" %}
+                                        <i class="fas fa-circle-xmark"></i>
+                                    {% else %}
+                                        <i class="fas fa-hourglass-half"></i>
+                                    {% endif %}
+                                    {{ leave.status }}
+                                </span>
+                            </td>
+
+                            <!-- Action -->
+                            <td>
+                                {% if leave.status == "Pending" %}
+                                <div class="action-buttons">
+                                    <form method="post"
+                                          action="{% url 'hr_update_leave_status' leave.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                                name="status"
+                                                value="Approved"
+                                                class="btn-approve">
+                                            <i class="fas fa-check"></i>
+                                            Approve
+                                        </button>
+                                    </form>
+
+                                    <form method="post"
+                                          action="{% url 'hr_update_leave_status' leave.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                                name="status"
+                                                value="Rejected"
+                                                class="btn-reject">
+                                            <i class="fas fa-times"></i>
+                                            Reject
+                                        </button>
+                                    </form>
+                                </div>
+                                {% else %}
+                                    <span class="reviewed-text">
+                                        <i class="fas fa-check-circle"></i>
+                                        Reviewed
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">
+                                        <i class="fas fa-calendar-xmark"></i>
+                                    </div>
+                                    <h4>No leave requests found</h4>
+                                    <p>
+                                        There are currently no employee leave
+                                        applications to display.
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Leave Requests · NexusCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* ========== TOP BAR ========== */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.1rem 2rem;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .brand-icon {
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 18px -4px rgba(13, 148, 136, 0.35);
+        }
+
+        .brand-text span {
+            color: #0d9488;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.4rem 0.85rem 0.4rem 0.45rem;
+            text-decoration: none;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.78rem;
+            flex-shrink: 0;
+        }
+
+        .user-chip-info {
+            line-height: 1.2;
+        }
+
+        .user-chip-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .user-chip-role {
+            font-size: 0.68rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .btn-logout-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-logout-top:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+            box-shadow: 0 8px 16px -8px rgba(220, 38, 38, 0.6);
+            transform: translateY(-1px);
+        }
+
+        /* ========== MAIN ========== */
+        .main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* Page header */
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .page-header-left h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            margin-bottom: 0.3rem;
+        }
+
+        .page-header-left p {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+
+        .page-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.78rem 1.6rem;
+            border-radius: 13px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0d9488, #0f766e);
+            color: white;
+            box-shadow: 0 10px 20px -10px rgba(13, 148, 136, 0.6);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 26px -12px rgba(13, 148, 136, 0.7);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+            transform: translateY(-1px);
+        }
+
+        /* ========== LEAVE LIST ========== */
+        .leave-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .leave-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 22px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.2);
+            padding: 1.6rem 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .leave-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 24px 38px -20px rgba(0, 0, 0, 0.28);
+            border-color: #cbd5e1;
+        }
+
+        /* Card top */
+        .leave-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .leave-type-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .leave-type-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #f0fdfa;
+            color: #0d9488;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .leave-type-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+            margin-bottom: 0.15rem;
+        }
+
+        .leave-type-sub {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+
+        .status-badge i {
+            font-size: 0.65rem;
+        }
+
+        .status-badge.pending {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .status-badge.approved {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .status-badge.rejected {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        /* Card body */
+        .leave-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            padding-bottom: 1.1rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .leave-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            font-size: 0.86rem;
+        }
+
+        .leave-detail-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #0d9488;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .leave-detail-label {
+            color: #94a3b8;
+            font-weight: 500;
+            white-space: nowrap;
+            min-width: 90px;
+        }
+
+        .leave-detail-value {
+            color: #1e293b;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .leave-detail-value.reason {
+            font-weight: 500;
+            color: #475569;
+            font-size: 0.85rem;
+        }
+
+        /* Card footer */
+        .leave-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .reviewed-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .reviewed-info i {
+            color: #0d9488;
+            font-size: 0.8rem;
+        }
+
+        .reviewed-info strong {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .applied-date {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            color: #94a3b8;
+        }
+
+        .applied-date i {
+            font-size: 0.72rem;
+        }
+
+        /* ========== EMPTY STATE ========== */
+        .empty-state {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 24px 50px -22px rgba(0, 0, 0, 0.22);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            background: #f0fdfa;
+            color: #0d9488;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+            color: #64748b;
+            max-width: 360px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 560px) {
+            .topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .brand {
+                font-size: 1.1rem;
+            }
+
+            .brand-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1.05rem;
+            }
+
+            .user-chip-info {
+                display: none;
+            }
+
+            .main {
+                padding: 2rem 1rem 3rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .page-header-left h1 {
+                font-size: 1.4rem;
+            }
+
+            .page-header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .leave-card-top {
+                flex-direction: column;
+                gap: 0.85rem;
+            }
+
+            .leave-card-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========== TOP BAR ========== -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-diagram-project"></i>
+            </div>
+            <div class="brand-text">Nexus<span>Core</span></div>
+        </div>
+
+        <div class="topbar-actions">
+
+            <div class="user-chip">
+                <div class="user-avatar">{{ manager.name|slice:":2"|upper }}</div>
+                <div class="user-chip-info">
+                    <div class="user-chip-name">{{ manager.name }}</div>
+                    <div class="user-chip-role">{{ manager.get_role_display|default:"Project Manager" }}</div>
+                </div>
+            </div>
+
+           
+
+        </div>
+
+    </header>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <div class="page-header-left">
+                <h1>My Leave Requests</h1>
+                <p>View your submitted leave applications and their status.</p>
+            </div>
+
+            <div class="page-header-actions">
+                <a href="{% url 'project_manager_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-house"></i> Back to Dashboard
+                </a>
+                <a href="{% url 'project_manager_apply_leave' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Apply for Leave
+                </a>
+            </div>
+        </div>
+
+        <!-- ========== LEAVE LIST ========== -->
+        {% if leaves %}
+
+        <div class="leave-list">
+
+            {% for leave in leaves %}
+            <div class="leave-card">
+
+                <!-- Card top: leave type + status -->
+                <div class="leave-card-top">
+                    <div class="leave-type-wrap">
+                        <div class="leave-type-icon">
+                            <i class="fas fa-umbrella-beach"></i>
+                        </div>
+                        <div>
+                            <div class="leave-type-title">{{ leave.leave_type }}</div>
+                            <div class="leave-type-sub">Leave Request</div>
+                        </div>
+                    </div>
+
+                    <span class="status-badge {{ leave.status|lower }}">
+                        {% if leave.status == 'Approved' %}
+                        <i class="fas fa-circle-check"></i>
+                        {% elif leave.status == 'Rejected' %}
+                        <i class="fas fa-circle-xmark"></i>
+                        {% else %}
+                        <i class="fas fa-hourglass-half"></i>
+                        {% endif %}
+                        {{ leave.status }}
+                    </span>
+                </div>
+
+                <!-- Card body: dates + reason -->
+                <div class="leave-card-body">
+
+                    <div class="leave-detail">
+                        <div class="leave-detail-icon">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <span class="leave-detail-label">From:</span>
+                        <span class="leave-detail-value">{{ leave.from_date }}</span>
+                    </div>
+
+                    <div class="leave-detail">
+                        <div class="leave-detail-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <span class="leave-detail-label">To:</span>
+                        <span class="leave-detail-value">{{ leave.to_date }}</span>
+                    </div>
+
+                    <div class="leave-detail">
+                        <div class="leave-detail-icon">
+                            <i class="fas fa-pen"></i>
+                        </div>
+                        <span class="leave-detail-label">Reason:</span>
+                        <span class="leave-detail-value reason">{{ leave.reason }}</span>
+                    </div>
+
+                </div>
+
+                <!-- Card footer: reviewed info + applied date -->
+                <div class="leave-card-footer">
+
+                    <div class="reviewed-info">
+                        {% if leave.reviewed_by %}
+                        <i class="fas fa-user-check"></i>
+                        Reviewed by <strong>{{ leave.reviewed_by }}</strong>
+                        {% else %}
+                        <i class="fas fa-clock"></i>
+                        Awaiting review
+                        {% endif %}
+                    </div>
+
+                    <div class="applied-date">
+                        <i class="fas fa-clock-rotate-left"></i>
+                        Applied on {{ leave.applied_date }}
+                    </div>
+
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <!-- Empty state -->
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-calendar-xmark"></i>
+            </div>
+            <h3>No leave requests yet</h3>
+            <p>You haven't submitted any leave requests. Once you do, they'll appear here for you to track.</p>
+            <a href="{% url 'project_manager_apply_leave' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Apply for Leave
+            </a>
+        </div>
+
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>

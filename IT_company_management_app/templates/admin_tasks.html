@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Tasks · NexusCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* ========== TOP BAR ========== */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.1rem 2rem;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .brand-icon {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 18px -4px rgba(37, 99, 235, 0.35);
+        }
+
+        .brand-text span {
+            color: #2563eb;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .admin-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.4rem 0.85rem 0.4rem 0.45rem;
+            text-decoration: none;
+            transition: all 0.18s;
+        }
+
+        .admin-chip:hover {
+            background: #ffffff;
+            border-color: #cbd5e1;
+        }
+
+        .admin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.78rem;
+            flex-shrink: 0;
+        }
+
+        .admin-chip-info {
+            line-height: 1.2;
+        }
+
+        .admin-chip-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .admin-chip-role {
+            font-size: 0.68rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .btn-logout-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-logout-top:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+            box-shadow: 0 8px 16px -8px rgba(220, 38, 38, 0.6);
+            transform: translateY(-1px);
+        }
+
+        /* ========== MAIN ========== */
+        .main {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* Page header */
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .page-header-left h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            margin-bottom: 0.3rem;
+        }
+
+        .page-header-left p {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+
+        .page-header-left .welcome-sub {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .page-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.78rem 1.6rem;
+            border-radius: 13px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+            transform: translateY(-1px);
+        }
+
+        /* ========== FILTER CARD ========== */
+        .filter-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.15);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-form {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.88rem;
+            pointer-events: none;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .search-box input::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .filter-select {
+            position: relative;
+            min-width: 170px;
+        }
+
+        .filter-select i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        select.filter-select-input {
+            width: 100%;
+            padding: 0.7rem 2.5rem 0.7rem 2.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px;
+            cursor: pointer;
+            transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        select.filter-select-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-filter {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.4rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 16px -8px rgba(37, 99, 235, 0.5);
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-filter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px -10px rgba(37, 99, 235, 0.6);
+        }
+
+        .btn-clear {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.18s ease;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-clear:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+
+        /* ========== TABLE CARD ========== */
+        .table-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 24px 50px -22px rgba(0, 0, 0, 0.22);
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+        }
+
+        .table-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.35rem 1.75rem;
+            border-bottom: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+        }
+
+        .table-card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .table-card-header-left h3 {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .table-card-header-left h3 i {
+            color: #2563eb;
+            font-size: 0.92rem;
+        }
+
+        .record-count {
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #eef2ff;
+            color: #2563eb;
+            padding: 0.2rem 0.65rem;
+            border-radius: 100px;
+        }
+
+        /* Table */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        thead th {
+            text-align: left;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #64748b;
+            font-weight: 700;
+            padding: 0.95rem 1.5rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.88rem;
+            color: #334155;
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr {
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: #fafafa;
+        }
+
+        /* Task cell */
+        .task-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 200px;
+        }
+
+        .task-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 11px;
+            background: #eef2ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .task-title-text {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 0.88rem;
+        }
+
+        /* Project cell */
+        .project-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #475569;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .project-cell i {
+            color: #cbd5e1;
+            font-size: 0.78rem;
+        }
+
+        /* Developer cell */
+        .developer-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .developer-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.68rem;
+            flex-shrink: 0;
+        }
+
+        .developer-name {
+            font-weight: 500;
+            color: #1e293b;
+            white-space: nowrap;
+        }
+
+        /* Priority badges */
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.28rem 0.75rem;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+
+        .priority-badge i {
+            font-size: 0.65rem;
+        }
+
+        .priority-badge.high,
+        .priority-badge.critical {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .priority-badge.medium,
+        .priority-badge.major {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .priority-badge.low,
+        .priority-badge.minor {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        /* Date cell */
+        .date-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #475569;
+            font-weight: 500;
+            white-space: nowrap;
+            font-size: 0.85rem;
+        }
+
+        .date-cell i {
+            color: #cbd5e1;
+            font-size: 0.72rem;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            white-space: nowrap;
+            text-transform: capitalize;
+        }
+
+        .status-badge i {
+            font-size: 0.68rem;
+        }
+
+        .status-badge.todo,
+        .status-badge.to-do,
+        .status-badge.pending {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .status-badge.in-progress {
+            background: #eef2ff;
+            color: #2563eb;
+        }
+
+        .status-badge.review,
+        .status-badge.in-review {
+            background: #f5f3ff;
+            color: #7c3aed;
+        }
+
+        .status-badge.completed,
+        .status-badge.done {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .status-badge.overdue {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3.5rem 1.5rem;
+        }
+
+        .empty-state-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 22px;
+            background: #eef2ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1.25rem;
+        }
+
+        .empty-state h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.4rem;
+        }
+
+        .empty-state p {
+            font-size: 0.88rem;
+            color: #64748b;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        /* ========== QUICK LINKS ========== */
+        .section-heading {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-heading i {
+            color: #2563eb;
+            font-size: 0.9rem;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        .quick-link {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.2);
+            padding: 1.5rem 1.4rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .quick-link:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 38px -20px rgba(0, 0, 0, 0.28);
+            border-color: #cbd5e1;
+        }
+
+        .quick-link-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .quick-link-icon.blue { background: #eef2ff; color: #2563eb; }
+        .quick-link-icon.purple { background: #f5f3ff; color: #7c3aed; }
+        .quick-link-icon.cyan { background: #ecfeff; color: #0891b2; }
+        .quick-link-icon.amber { background: #fffbeb; color: #d97706; }
+        .quick-link-icon.green { background: #ecfdf5; color: #059669; }
+        .quick-link-icon.red { background: #fef2f2; color: #dc2626; }
+
+        .quick-link-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .quick-link-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.15rem;
+        }
+
+        .quick-link-desc {
+            font-size: 0.78rem;
+            color: #64748b;
+        }
+
+        .quick-link-arrow {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            transition: color 0.18s, transform 0.18s;
+        }
+
+        .quick-link:hover .quick-link-arrow {
+            color: #2563eb;
+            transform: translateX(3px);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .quick-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .brand {
+                font-size: 1.1rem;
+            }
+
+            .brand-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1.05rem;
+            }
+
+            .admin-chip-info {
+                display: none;
+            }
+
+
+            .main {
+                padding: 2rem 1rem 3rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .page-header-left h1 {
+                font-size: 1.4rem;
+            }
+
+            .page-header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .filter-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box,
+            .filter-select {
+                min-width: 100%;
+            }
+
+            .btn-filter,
+            .btn-clear {
+                width: 100%;
+                justify-content: center;
+            }
+
+            thead th,
+            tbody td {
+                padding: 0.85rem 1rem;
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========== TOP BAR ========== -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-cubes"></i>
+            </div>
+            <div class="brand-text">Nexus<span>Core</span></div>
+        </div>
+
+        <div class="topbar-actions">
+
+            <a href="#" class="admin-chip">
+                <div class="admin-avatar">{{ admin.username|slice:":2"|upper }}</div>
+                <div class="admin-chip-info">
+                    <div class="admin-chip-name">{{ admin.username|upper }} </div>
+                    <div class="admin-chip-role">Super Admin</div>
+                </div>
+            </a>
+
+           
+
+        </div>
+
+    </header>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main">
+
+        <!-- Page header with Back to Dashboard -->
+        <div class="page-header">
+            <div class="page-header-left">
+                <h1>All Tasks</h1>
+                <p>View task assignments and progress across all projects.</p>
+                <div class="welcome-sub">
+                    <i class="fas fa-user-shield" style="margin-right: 4px;"></i>
+                    Welcome, {{ request.user.username }} — Administrator
+                </div>
+            </div>
+
+            <div class="page-header-actions">
+                <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-house"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- ========== FILTER CARD ========== -->
+        <div class="filter-card">
+            <form method="get" class="filter-form">
+
+                <div class="search-box">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="text" name="search" placeholder="Search task, project or developer"
+                        value="{{ search }}">
+                </div>
+
+                <div class="filter-select">
+                    <i class="fas fa-filter"></i>
+                    <select name="status" class="filter-select-input">
+                        <option value="">All Statuses</option>
+                        {% for value, label in statuses %}
+                        <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-select">
+                    <i class="fas fa-flag"></i>
+                    <select name="priority" class="filter-select-input">
+                        <option value="">All Priorities</option>
+                        {% for value, label in priorities %}
+                        <option value="{{ value }}" {% if selected_priority == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-filter">
+                    <i class="fas fa-filter"></i> Apply Filters
+                </button>
+
+                <a href="{% url 'admin_tasks' %}" class="btn-clear">
+                    <i class="fas fa-xmark"></i> Reset
+                </a>
+
+            </form>
+        </div>
+
+        <!-- ========== TABLE CARD ========== -->
+        <div class="table-card">
+
+            <div class="table-card-header">
+                <div class="table-card-header-left">
+                    <h3><i class="fas fa-list-check"></i> Task Directory</h3>
+                    <span class="record-count">{{ tasks|length }} record{{ tasks|length|pluralize }}</span>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Project</th>
+                            <th>Assigned Developer</th>
+                            <th>Priority</th>
+                            <th>Deadline</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <!-- Task -->
+                            <td>
+                                <div class="task-cell">
+                                    <div class="task-icon">
+                                        <i class="fas fa-list-check"></i>
+                                    </div>
+                                    <span class="task-title-text">{{ task.task_title }}</span>
+                                </div>
+                            </td>
+
+                            <!-- Project -->
+                            <td>
+                                <div class="project-cell">
+                                    <i class="fas fa-folder-open"></i>
+                                    {{ task.project.project_name }}
+                                </div>
+                            </td>
+
+                            <!-- Developer -->
+                            <td>
+                                <div class="developer-cell">
+                                    <div class="developer-avatar">
+                                        {{ task.assigned_to.name|slice:":2"|upper }}
+                                    </div>
+                                    <span class="developer-name">{{ task.assigned_to.name }}</span>
+                                </div>
+                            </td>
+
+                            <!-- Priority -->
+                            <td>
+                                <span class="priority-badge {{ task.priority|lower }}">
+                                    {% if task.priority == 'High' or task.priority == 'Critical' %}
+                                    <i class="fas fa-arrow-up"></i>
+                                    {% elif task.priority == 'Low' or task.priority == 'Minor' %}
+                                    <i class="fas fa-arrow-down"></i>
+                                    {% else %}
+                                    <i class="fas fa-minus"></i>
+                                    {% endif %}
+                                    {{ task.get_priority_display }}
+                                </span>
+                            </td>
+
+                            <!-- Deadline -->
+                            <td>
+                                <div class="date-cell">
+                                    <i class="fas fa-calendar-check"></i>
+                                    {{ task.deadline|date:"d M Y"|default:"Not set" }}
+                                </div>
+                            </td>
+
+                            <!-- Status -->
+                            <td>
+                                <span class="status-badge {{ task.status|lower|slugify }}">
+                                    {% if task.status == 'Completed' %}
+                                    <i class="fas fa-circle-check"></i>
+                                    {% elif task.status == 'In Progress' %}
+                                    <i class="fas fa-spinner"></i>
+                                    {% elif task.status == 'In Review' %}
+                                    <i class="fas fa-eye"></i>
+                                    {% else %}
+                                    <i class="fas fa-hourglass-half"></i>
+                                    {% endif %}
+                                    {{ task.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">
+                                        <i class="fas fa-clipboard-list"></i>
+                                    </div>
+                                    <h4>No tasks found</h4>
+                                    <p>There are currently no tasks matching your search. Try adjusting the filters.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- ========== QUICK LINKS ========== -->
+        <h2 class="section-heading"><i class="fas fa-bolt"></i> Quick Links</h2>
+
+        <div class="quick-links">
+
+            <!-- Employees -->
+            <a href="{% url 'employees' %}" class="quick-link">
+                <div class="quick-link-icon blue"><i class="fas fa-users"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Employees</div>
+                    <div class="quick-link-desc">Manage team members</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Clients -->
+            <a href="{% url 'client_list'%}" class="quick-link">
+                <div class="quick-link-icon purple"><i class="fas fa-user-tie"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Clients</div>
+                    <div class="quick-link-desc">View client records</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Projects -->
+            <a href="{% url 'manage_projects' %}" class="quick-link">
+                <div class="quick-link-icon cyan"><i class="fas fa-folder-open"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Projects</div>
+                    <div class="quick-link-desc">Track project progress</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Tasks -->
+            <a href="{% url 'admin_tasks' %}" class="quick-link">
+                <div class="quick-link-icon amber"><i class="fas fa-list-check"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Tasks</div>
+                    <div class="quick-link-desc">Manage all tasks</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Bugs -->
+            <a href="{% url 'report_bug'%}" class="quick-link">
+                <div class="quick-link-icon red"><i class="fas fa-bug"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Bugs</div>
+                    <div class="quick-link-desc">Track reported bugs</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Reports -->
+            <a href="{% url 'admin_reports'%}" class="quick-link">
+                <div class="quick-link-icon green"><i class="fas fa-chart-pie"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Reports</div>
+                    <div class="quick-link-desc">View analytics &amp; insights</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Manage Leave Requests -->
+            <a href="{% url 'manage_leave_requests' %}" class="quick-link">
+                <div class="quick-link-icon green"><i class="fas fa-calendar-check"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Leave Requests</div>
+                    <div class="quick-link-desc">Review, approve or reject employee leave</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Employees · NexusCore</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        /* Top bar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 30px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: #2563eb;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand span {
+            color: #2563eb;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+        }
+
+        .admin-avatar {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .admin-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .admin-role {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 10px 14px;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* Main content */
+        .main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px 25px;
+        }
+
+        /* Welcome row */
+        .welcome-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 27px;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* Back to dashboard button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 18px;
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .back-btn:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+            transform: translateY(-1px);
+        }
+
+        /* Employee summary */
+        .summary-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 22px 25px;
+            margin-bottom: 25px;
+        }
+
+        .summary-label {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .summary-number {
+            font-size: 30px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .summary-icon {
+            width: 52px;
+            height: 52px;
+            background: #eef2ff;
+            color: #2563eb;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        /* Employee table */
+        .table-panel {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .table-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 22px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .table-heading h2 {
+            font-size: 17px;
+            color: #0f172a;
+        }
+
+        .table-heading p {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 280px;
+            max-width: 100%;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 11px 12px 11px 37px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        thead {
+            background: #f8fafc;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px 22px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+        }
+
+        td {
+            padding: 16px 22px;
+            border-top: 1px solid #f1f5f9;
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .employee-cell {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .employee-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #dbeafe;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .employee-name {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .employee-email {
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #eef2ff;
+            color: #4338ca;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .active {
+            color: #059669;
+        }
+
+        .inactive {
+            color: #dc2626;
+        }
+
+        .action-cell {
+            white-space: nowrap;
+        }
+
+        .action-btn {
+            display: inline-block;
+            text-decoration: none;
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .edit-btn {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .status-btn {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+
+        .empty-row {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+
+        .table-footer {
+            padding: 17px 22px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+
+        /* ========== QUICK LINKS ========== */
+        .section-heading {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-heading i {
+            color: #2563eb;
+            font-size: 0.9rem;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        .quick-link {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.2);
+            padding: 1.5rem 1.4rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .quick-link:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 38px -20px rgba(0, 0, 0, 0.28);
+            border-color: #cbd5e1;
+        }
+
+        .quick-link-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .quick-link-icon.blue {
+            background: #eef2ff;
+            color: #2563eb;
+        }
+
+        .quick-link-icon.purple {
+            background: #f5f3ff;
+            color: #7c3aed;
+        }
+
+        .quick-link-icon.cyan {
+            background: #ecfeff;
+            color: #0891b2;
+        }
+
+        .quick-link-icon.amber {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .quick-link-icon.green {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .quick-link-icon.red {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .quick-link-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .quick-link-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.15rem;
+        }
+
+        .quick-link-desc {
+            font-size: 0.78rem;
+            color: #64748b;
+        }
+
+        .quick-link-arrow {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            transition: color 0.18s, transform 0.18s;
+        }
+
+        .quick-link:hover .quick-link-arrow {
+            color: #2563eb;
+            transform: translateX(3px);
+        }
+
+
+
+        /* Mobile layout */
+        @media (max-width: 600px) {
+            .topbar {
+                padding: 14px 16px;
+            }
+
+            .brand {
+                font-size: 19px;
+            }
+
+            .admin-info {
+                display: none;
+            }
+
+            .quick-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .welcome-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+
+        .main {
+            padding: 25px 14px;
+        }
+
+        .welcome h1 {
+            font-size: 22px;
+        }
+
+        .table-heading {
+            align-items: stretch;
+            flex-direction: column;
+            padding: 18px;
+        }
+
+        .search-box {
+            width: 100%;
+        }
+
+        .summary-card {
+            padding: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top bar -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-cubes"></i>
+            </div>
+            <div>Nexus<span>Core</span></div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="admin-info">
+                <div class="admin-avatar">{{ admin.username|slice:":2"|upper }}</div>
+                <div>
+                    <div class="admin-name">{{ admin.username|upper }}</div>
+                    <div class="admin-role">Super Admin</div>
+                </div>
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- Main content -->
+    <main class="main">
+
+        <!-- Welcome row with Back to Dashboard button -->
+        <div class="welcome-row">
+            <section class="welcome">
+                <h1>Manage Employees 👋</h1>
+                <p>View and manage employee accounts in your organization.</p>
+            </section>
+
+            <a href="{% url 'admin_dashboard' %}" class="back-btn">
+                <i class="fas fa-house"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Employee count -->
+        <section class="summary-card">
+            <div>
+                <div class="summary-label">Total Employees</div>
+                <div class="summary-number">{{ employee_count }}</div>
+            </div>
+
+            <div class="summary-icon">
+                <i class="fas fa-users"></i>
+            </div>
+        </section>
+
+        <!-- Employee list -->
+        <section class="table-panel">
+
+            <div class="table-heading">
+                <div>
+                    <h2>All Employees</h2>
+                    <p>Search, edit, or update employee accounts.</p>
+                </div>
+
+                <form method="GET" action="{% url 'employees' %}" class="search-box">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="text" name="search" value="{{ search }}" placeholder="Search employees...">
+                </form>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for employee in employees %}
+                        <tr>
+                            <td>
+                                <div class="employee-cell">
+                                    <div class="employee-avatar">
+                                        {{ employee.name|slice:":1"|upper }}
+                                    </div>
+
+                                    <div>
+                                        <div class="employee-name">
+                                            {{ employee.name }}
+                                        </div>
+                                        <div class="employee-email">
+                                            {{ employee.email }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>{{ employee.username }}</td>
+
+                            <td>
+                                <span class="role-badge">
+                                    {{ employee.get_role_display }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {% if employee.is_active %}
+                                <span class="status active">
+                                    <i class="fas fa-circle"></i> Active
+                                </span>
+                                {% else %}
+                                <span class="status inactive">
+                                    <i class="fas fa-circle"></i> Inactive
+                                </span>
+                                {% endif %}
+                            </td>
+
+                            <td class="action-cell">
+                                <a href="{% url 'edit_employee' employee.id %}" class="action-btn edit-btn">
+                                    <i class="fas fa-pen"></i> Edit
+                                </a>
+
+                                <a href="{% url 'toggle_status' employee.id %}" class="action-btn status-btn">
+                                    {% if employee.is_active %}
+                                    Deactivate
+                                    {% else %}
+                                    Activate
+                                    {% endif %}
+                                </a>
+                            </td>
+                        </tr>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="empty-row">
+                                <i class="fas fa-users"></i>
+                                <p style="margin-top: 10px;">No employees found.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer">
+                Showing {{ employee_count }} employee(s)
+            </div>
+
+        </section><br>
+
+        <!-- ========== QUICK LINKS (SIX MODULES) ========== -->
+        <h2 class="section-heading"><i class="fas fa-bolt"></i> Quick Links</h2>
+
+        <div class="quick-links">
+
+            <!-- Employees -->
+            <a href="{% url 'employees' %}" class="quick-link">
+                <div class="quick-link-icon blue"><i class="fas fa-users"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Employees</div>
+                    <div class="quick-link-desc">Manage team members</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Clients -->
+            <a href="{% url 'client_list'%}" class="quick-link">
+                <div class="quick-link-icon purple"><i class="fas fa-user-tie"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Clients</div>
+                    <div class="quick-link-desc">View client records</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Projects -->
+            <a href="{% url 'manage_projects'%}" class="quick-link">
+                <div class="quick-link-icon cyan"><i class="fas fa-folder-open"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Projects</div>
+                    <div class="quick-link-desc">Track project progress</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Tasks -->
+            <a href="{% url 'admin_tasks'%}" class="quick-link">
+                <div class="quick-link-icon amber"><i class="fas fa-list-check"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Tasks</div>
+                    <div class="quick-link-desc">Manage all tasks</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Bugs -->
+            <a href="{% url 'report_bug'%}" class="quick-link">
+                <div class="quick-link-icon red"><i class="fas fa-bug"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Bugs</div>
+                    <div class="quick-link-desc">Track reported bugs</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+            <!-- Reports -->
+            <a href="{% url 'admin_reports'%}" class="quick-link">
+                <div class="quick-link-icon green"><i class="fas fa-chart-pie"></i></div>
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Reports</div>
+                    <div class="quick-link-desc">View analytics &amp; insights</div>
+                </div>
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+
+
+            <!-- Leave Requests -->
+            <a href="{% url 'manage_leave_requests' %}" class="quick-link">
+                <div class="quick-link-icon green">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+
+                <div class="quick-link-info">
+                    <div class="quick-link-title">Leave Requests</div>
+                    <div class="quick-link-desc">
+                        Review, approve or reject employee leave
+                    </div>
+                </div>
+
+                <i class="fas fa-chevron-right quick-link-arrow"></i>
+            </a>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

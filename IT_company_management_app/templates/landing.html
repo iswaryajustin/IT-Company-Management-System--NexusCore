@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusCore CRM · IT Management Suite</title>
+    <!-- Google Fonts + Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc;
+            color: #1e293b;
+            line-height: 1.5;
+            /* Background image with a subtle overlay for readability */
+            background-image: 
+                linear-gradient(135deg, rgba(247, 249, 252, 0.92) 0%, rgba(230, 238, 250, 0.88) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+
+        .landing-wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ---------- NAVIGATION ---------- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.7rem;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            box-shadow: 0 8px 18px -4px rgba(37, 99, 235, 0.3);
+        }
+
+        .logo-text span {
+            color: #2563eb;
+        }
+
+        /* ---------- BUTTONS (generic) ---------- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.4rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 6px 14px -4px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            box-shadow: 0 10px 20px -6px rgba(37, 99, 235, 0.45);
+            transform: translateY(-1px);
+        }
+
+        /* ---------- ADMIN LOGIN BUTTON ---------- */
+        .btn-admin {
+            background: transparent;
+            border: 1px solid #fca5a5;
+            color: #dc2626;
+        }
+
+        .btn-admin:hover {
+            background: #fef2f2;
+            border-color: #f87171;
+            color: #b91c1c;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px -6px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-admin i {
+            color: #ef4444;
+        }
+
+        .btn-large {
+            padding: 0.85rem 2rem;
+            font-size: 1rem;
+        }
+
+        /* ---------- HERO SECTION ---------- */
+        .hero-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 3rem;
+            margin: 1.5rem 0 4rem;
+        }
+
+        .hero-content {
+            flex: 1 1 350px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #2563eb;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.3px;
+            padding: 0.35rem 1rem;
+            border-radius: 100px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .hero-content h1 {
+            font-size: 3.1rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero-highlight {
+            color: #2563eb;
+            background: linear-gradient(145deg, #2563eb, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: #475569;
+            max-width: 550px;
+            margin-bottom: 0;
+        }
+
+        /* ---------- AUTH CARD ---------- */
+        .auth-card {
+            flex: 0 0 400px;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 2.5rem 2rem 2.8rem;
+            box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .auth-card-icon {
+            width: 64px;
+            height: 64px;
+            background: #eef2ff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #2563eb;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-card h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            max-width: 280px;
+        }
+
+        .auth-options {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .auth-option-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.9rem 1.5rem;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .auth-option-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 10px 18px -8px rgba(37, 99, 235, 0.4);
+        }
+
+        .auth-option-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px -8px rgba(37, 99, 235, 0.5);
+        }
+
+        .auth-option-secondary {
+            background: #f8fafc;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .auth-option-secondary:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+
+        /* ---------- FEATURES SECTION ---------- */
+        .features-section {
+            margin-top: 5rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #475569;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(241, 245, 249, 0.9);
+            box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.12);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 32px -16px rgba(0, 0, 0, 0.18);
+            border-color: #e2e8f0;
+        }
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            background: #eef2ff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            color: #0f172a;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ---------- FOOTER ---------- */
+        .footer-note {
+            text-align: center;
+            margin-top: 5rem;
+            color: #64748b;
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            padding-top: 2rem;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 900px) {
+            .hero-section {
+                flex-direction: column-reverse;
+                gap: 2rem;
+            }
+
+            .auth-card {
+                flex: 1 1 auto;
+                width: 100%;
+                max-width: 460px;
+                margin: 0 auto;
+                padding: 2rem 1.5rem;
+            }
+
+            .hero-content {
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.6rem;
+            }
+
+            .btn-admin {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .landing-wrapper {
+                padding: 1rem 1rem 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .auth-card {
+                padding: 1.8rem 1.2rem;
+            }
+
+            .logo-area {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+     {% csrf_token %}
+    <div class="landing-wrapper">
+        <!-- ========== NAVBAR ========== -->
+        <header class="navbar">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fas fa-cubes"></i>
+                </div>
+                <div class="logo-text">Nexus<span>Core</span></div>
+            </div>
+
+            <!-- Admin login button added to navbar -->
+            <div class="nav-buttons">
+                <a href="{% url 'admin_login' %}" class="btn btn-admin">
+                    <i class="fas fa-user-shield"></i> Admin Login
+                </a>
+            </div>
+        </header>
+
+        <!-- ========== HERO + AUTH OPTIONS CARD ========== -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="badge">
+                    <i class="fas fa-bolt" style="margin-right: 6px;"></i> IT Management & CRM
+                </div>
+                <h1>
+                    Manage your IT <br>
+                    <span class="hero-highlight">clients & teams</span><br>
+                    in one place.
+                </h1>
+                <p class="hero-description">
+                    NexusCore unifies CRM, project tracking, helpdesk, and asset management — built for IT companies, MSPs, and tech teams.
+                </p>
+            </div>
+
+            <!-- AUTH CARD: only login and register buttons -->
+            <div class="auth-card">
+                <div class="auth-card-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2>Welcome to NexusCore</h2>
+                <p>Log in to your account or create a new one to get started.</p>
+
+                <div class="auth-options">
+                    <!-- Login option -->
+                    <a href="{%url 'login'%}" class="auth-option-btn auth-option-primary">
+                        <i class="fas fa-arrow-right-to-bracket"></i> Log in
+                    </a>
+                    <!-- Register option -->
+                    <a href="{%url 'register'%}" class="auth-option-btn auth-option-secondary">
+                        <i class="fas fa-user-plus"></i> Create account
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== FEATURES SECTION ========== -->
+        <section class="features-section">
+            <h2 class="section-title">Everything your IT company needs</h2>
+            <p class="section-subtitle">From client management to ticket resolution — streamline your entire operation.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <h3>Client CRM</h3>
+                    <p>360° view of customers, contracts, and communication history.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-ticket-alt"></i></div>
+                    <h3>Helpdesk & SLAs</h3>
+                    <p>Track tickets, assign agents, and meet SLAs with automated workflows.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Project Management</h3>
+                    <p>Plan sprints, allocate resources, and monitor project profitability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Analytics & Reports</h3>
+                    <p>Real-time dashboards for revenue, utilization, and team performance.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== FOOTER ========== -->
+        <div class="footer-note">
+            <i class="fas fa-shield-alt" style="margin-right: 6px;"></i> Enterprise-grade security · SOC 2 compliant · 99.9% uptime
+        </div>
+    </div>
+</body>
+</html>

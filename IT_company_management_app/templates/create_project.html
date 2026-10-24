@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if project %}Edit Project{% else %}Create New Project{% endif %} · NexusCore
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* ========== TOP BAR ========== */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.1rem 2rem;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .brand-icon {
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 18px -4px rgba(13, 148, 136, 0.35);
+        }
+
+        .brand-text span {
+            color: #0d9488;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.4rem 0.85rem 0.4rem 0.45rem;
+            text-decoration: none;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.78rem;
+            flex-shrink: 0;
+        }
+
+        .user-chip-info {
+            line-height: 1.2;
+        }
+
+        .user-chip-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .user-chip-role {
+            font-size: 0.68rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .btn-logout-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-logout-top:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+            box-shadow: 0 8px 16px -8px rgba(220, 38, 38, 0.6);
+            transform: translateY(-1px);
+        }
+
+        /* ========== MAIN ========== */
+        .main {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* Page header */
+        .page-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            margin-bottom: 0.3rem;
+        }
+
+        .page-header p {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb a {
+            color: #0d9488;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* ========== FORM CARD ========== */
+        .form-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 26px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 24px 50px -22px rgba(0, 0, 0, 0.22);
+            padding: 2.2rem 2rem;
+        }
+
+        .form-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 1.75rem;
+        }
+
+        .form-card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: #f0fdfa;
+            color: #0d9488;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+
+        .form-card-header-info h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .form-card-header-info p {
+            font-size: 0.83rem;
+            color: #64748b;
+            margin-top: 0.15rem;
+        }
+
+        /* Non-field errors */
+        .form-error-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 14px;
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            color: #b91c1c;
+            line-height: 1.5;
+        }
+
+        .form-error-banner i {
+            color: #dc2626;
+            font-size: 0.95rem;
+            margin-top: 0.1rem;
+            flex-shrink: 0;
+        }
+
+        .form-error-banner ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Django form field overrides */
+        .form-card form > div {
+            margin-bottom: 1.35rem;
+        }
+
+        .form-card form label {
+            display: block;
+            font-size: 0.83rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.45rem;
+        }
+
+        .form-card form input,
+        .form-card form select,
+        .form-card form textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            font-size: 0.92rem;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .form-card form input::placeholder,
+        .form-card form textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-card form input:focus,
+        .form-card form select:focus,
+        .form-card form textarea:focus {
+            outline: none;
+            border-color: #0d9488;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+        }
+
+        .form-card form textarea {
+            resize: vertical;
+            min-height: 110px;
+            line-height: 1.6;
+        }
+
+        /* Select dropdown arrow */
+        .form-card form select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            font-size: 0.92rem;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            cursor: pointer;
+            
+        }
+
+        .form-card form select:focus {
+             outline: none;
+             border-color: #0d9488;
+             background-color: white;
+        }
+
+        /* Multi-select (developers) */
+        .form-card form select[multiple] {
+            min-height: 120px;
+            padding: 0.6rem;
+            background-image: none;
+        }
+
+        .form-card form select[multiple] option {
+            padding: 0.5rem 0.7rem;
+            border-radius: 8px;
+            margin-bottom: 0.15rem;
+        }
+
+        .form-card form select[multiple] option:checked {
+            background: #f0fdfa;
+            color: #0d9488;
+            font-weight: 600;
+        }
+
+        /* Checkbox */
+        .form-card form input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0d9488;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        /* Help text */
+        .form-card form .helptext {
+            display: block;
+            font-size: 0.78rem;
+            color: #94a3b8;
+            margin-top: 0.35rem;
+            line-height: 1.5;
+        }
+
+        /* Field errors */
+        .form-card form .errorlist,
+        .field-error {
+            list-style: none;
+            margin-top: 0.4rem;
+            padding: 0.6rem 0.85rem;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: #dc2626;
+        }
+
+        .form-card form .errorlist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.35rem;
+        }
+
+        .form-card form .errorlist li::before {
+            content: "⚠";
+            flex-shrink: 0;
+        }
+
+        .field-error {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.35rem;
+        }
+
+        .field-error::before {
+            content: "⚠";
+            flex-shrink: 0;
+        }
+
+        /* Info note */
+        .info-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background: #f0fdfa;
+            border: 1px solid #99f6e4;
+            border-radius: 14px;
+            padding: 0.9rem 1.1rem;
+            margin-top: 1.5rem;
+            font-size: 0.82rem;
+            color: #115e59;
+            line-height: 1.55;
+        }
+
+        .info-note i {
+            color: #0d9488;
+            font-size: 1rem;
+            margin-top: 0.1rem;
+            flex-shrink: 0;
+        }
+
+        .info-note strong {
+            font-weight: 600;
+            color: #134e4a;
+        }
+
+        /* Actions */
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.78rem 1.6rem;
+            border-radius: 13px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0d9488, #0f766e);
+            color: white;
+            box-shadow: 0 10px 20px -10px rgba(13, 148, 136, 0.6);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 26px -12px rgba(13, 148, 136, 0.7);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+
+        
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 560px) {
+            .topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .brand {
+                font-size: 1.1rem;
+            }
+
+            .brand-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1.05rem;
+            }
+
+            .user-chip-info {
+                display: none;
+            }
+
+            .main {
+                padding: 2rem 1rem 3rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.4rem;
+            }
+
+            .form-card {
+                padding: 1.6rem 1.2rem;
+                border-radius: 22px;
+            }
+
+            .form-card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.85rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========== TOP BAR ========== -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-diagram-project"></i>
+            </div>
+            <div class="brand-text">Nexus<span>Core</span></div>
+        </div>
+
+        <div class="topbar-actions">
+
+            <div class="user-chip">
+                <div class="user-avatar">{{ manager.name|slice:":2"|upper }}</div>
+                <div class="user-chip-info">
+                    <div class="user-chip-name">{{ manager.name }}</div>
+                    <div class="user-chip-role">{{ manager.get_role_display|default:"Project Manager" }}</div>
+                </div>
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <h1>
+                {% if project %}
+                Edit Project
+                {% else %}
+                Create New Project
+                {% endif %}
+            </h1>
+            <p>
+                {% if project %}
+                Update the project details below.
+                {% else %}
+                Fill in the details to create a new project.
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="{% url 'my_projects' %}">
+                <i class="fas fa-arrow-left"></i> Back to My Projects
+            </a>
+        </div>
+
+        <!-- ========== FORM CARD ========== -->
+        <div class="form-card">
+
+            <div class="form-card-header">
+                <div class="form-card-icon">
+                    <i class="fas {% if project %}fa-folder-pen{% else %}fa-folder-plus{% endif %}"></i>
+                </div>
+                <div class="form-card-header-info">
+                    <h2>
+                        {% if project %}
+                        Project Details
+                        {% else %}
+                        New Project
+                        {% endif %}
+                    </h2>
+                    <p>
+                        {% if project %}
+                        Update the information and save your changes.
+                        {% else %}
+                        Provide the project information and assign team members.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <!-- Non-field errors -->
+                {% if form.non_field_errors %}
+                <div class="form-error-banner">
+                    <i class="fas fa-circle-exclamation"></i>
+                    <div>
+                        {{ form.non_field_errors }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Form fields -->
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                    <span class="helptext">{{ field.help_text }}</span>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                    <p class="field-error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <!-- Info note -->
+                <div class="info-note">
+                    <i class="fas fa-circle-info"></i>
+                    <div>
+                        <strong>Note:</strong> You can assign developers to this project after saving, and update the progress as work advances.
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-floppy-disk"></i> Save Project
+                    </button>
+                    <a href="{% url 'my_projects' %}" class="btn btn-secondary">
+                        <i class="fas fa-xmark"></i> Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

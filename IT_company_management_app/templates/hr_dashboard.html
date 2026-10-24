@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Dashboard · NexusCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+        
+        /* ========== LAYOUT ========== */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-brand-icon {
+            background: linear-gradient(135deg, #059669, #10b981);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 18px -4px rgba(5, 150, 105, 0.35);
+        }
+
+        .sidebar-brand-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+
+        .sidebar-brand-text span {
+            color: #34d399;
+        }
+
+        .sidebar-brand-tag {
+            display: block;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            font-weight: 600;
+            margin-top: 0.15rem;
+        }
+
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1.5rem;
+            margin: 0 0.75rem 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+        }
+
+        .sidebar-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-user-info {
+            overflow: hidden;
+        }
+
+        .sidebar-user-name {
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-user-role {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .nav-section-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            padding: 1rem 0.75rem 0.45rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            border-radius: 11px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.18s ease;
+            position: relative;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 0.98rem;
+            color: #94a3b8;
+            transition: color 0.18s;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: white;
+        }
+
+        .nav-item:hover i {
+            color: #34d399;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            box-shadow: 0 8px 18px -8px rgba(5, 150, 105, 0.6);
+        }
+
+        .nav-item.active i {
+            color: white;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: white;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.15rem 0.45rem;
+            border-radius: 100px;
+            line-height: 1.4;
+        }
+
+        .nav-item.active .nav-badge {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-badge.amber {
+            background: #f59e0b;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 0.75rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 0.5rem;
+        }
+
+        .nav-item.logout {
+            color: #fca5a5;
+            cursor: pointer;
+        }
+
+        .nav-item.logout i {
+            color: #f87171;
+        }
+
+        .nav-item.logout:hover {
+            background: rgba(239, 68, 68, 0.12);
+            color: #fecaca;
+        }
+
+        .nav-item.logout:hover i {
+            color: #fca5a5;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 1.5rem 2rem 3rem;
+            min-width: 0;
+        }
+
+        /* Top bar */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .topbar-left h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .topbar-left p {
+            color: #64748b;
+            font-size: 0.88rem;
+            margin-top: 0.15rem;
+        }
+
+        /* Welcome banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%);
+            border-radius: 22px;
+            padding: 2rem 2.2rem;
+            color: white;
+            margin-bottom: 1.75rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -20px rgba(5, 150, 105, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .welcome-banner::after {
+            content: "";
+            position: absolute;
+            right: -60px;
+            top: -60px;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .welcome-banner-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-banner h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+
+        .welcome-banner p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 520px;
+        }
+
+        .welcome-banner-meta {
+            display: flex;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .welcome-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            background: rgba(255, 255, 255, 0.14);
+            padding: 0.45rem 0.9rem;
+            border-radius: 100px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.2);
+            padding: 1.4rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 22px 36px -18px rgba(0, 0, 0, 0.25);
+        }
+
+        .stat-info {
+            min-width: 0;
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .stat-value {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+
+        .stat-trend {
+            font-size: 0.73rem;
+            font-weight: 600;
+            padding: 0.18rem 0.5rem;
+            border-radius: 100px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-trend.up {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .stat-trend.neutral {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .stat-trend.down {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.green {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .stat-icon.blue {
+            background: #eef2ff;
+            color: #2563eb;
+        }
+
+        .stat-icon.amber {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .stat-icon.purple {
+            background: #f5f3ff;
+            color: #7c3aed;
+        }
+
+        /* ========== LOGOUT CONFIRMATION MODAL (NEW) ========== */
+        .logout-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logout-modal-overlay.active {
+            display: flex;
+        }
+
+        .logout-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem 1.8rem 1.6rem;
+            max-width: 380px;
+            width: calc(100% - 2rem);
+            text-align: center;
+            box-shadow: 0 40px 60px -20px rgba(0, 0, 0, 0.4);
+        }
+
+        .logout-modal-icon {
+            width: 64px;
+            height: 64px;
+            background: #ecfdf5;
+            color: #059669;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1.2rem;
+        }
+
+        .logout-modal h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .logout-modal p {
+            font-size: 0.88rem;
+            color: #64748b;
+            margin-bottom: 1.6rem;
+            line-height: 1.5;
+        }
+
+        .logout-modal-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .logout-modal-actions button,
+        .logout-modal-actions a {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.18s;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0 !important;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .btn-confirm-logout {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            box-shadow: 0 8px 18px -8px rgba(220, 38, 38, 0.5);
+        }
+
+        .btn-confirm-logout:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 22px -10px rgba(220, 38, 38, 0.7);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 860px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 240px;
+                padding: 1.25rem 1.25rem 2.5rem;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .dashboard-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                padding: 1rem 0;
+            }
+
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+
+            .nav-section-label {
+                width: 100%;
+                padding: 0.75rem 0.75rem 0.25rem;
+            }
+
+            .nav-item {
+                flex: 1 1 auto;
+                min-width: 140px;
+                font-size: 0.83rem;
+                padding: 0.55rem 0.7rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.25rem 1rem 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-item {
+                min-width: 100%;
+            }
+
+            .topbar-left h1 {
+                font-size: 1.25rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-banner {
+                padding: 1.5rem 1.4rem;
+            }
+
+            .welcome-banner h2 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div>
+                    <div class="sidebar-brand-text">Nexus<span>Core</span></div>
+                    <span class="sidebar-brand-tag">HR Panel</span>
+                </div>
+            </div>
+
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar">{{ employee.name|slice:":2"|upper }}</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name">{{ employee.name }}</div>
+                    <div class="sidebar-user-role">{{ employee.role|upper}}</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <div class="nav-section-label">Main</div>
+
+                <a href="{% url 'hr_dashboard' %}" class="nav-item active">
+                    <i class="fas fa-house"></i> Dashboard
+                </a>
+
+                <div class="nav-section-label">Leave Management</div>
+
+                <!-- Apply Leave -->
+                <a href="{% url 'hr_apply_leave' %}" class="nav-item">
+                    <i class="fas fa-paper-plane"></i> Apply Leave
+                </a>
+
+                <!-- My Leave Requests -->
+                <a href="{% url 'hr_my_leave_requests' %}" class="nav-item">
+                    <i class="fas fa-clock-rotate-left"></i> My Leave Requests
+                </a>
+
+                <!-- Manage Leave Requests -->
+                <a href="{% url 'hr_leave_requests' %}" class="nav-item">
+                    <i class="fas fa-calendar-check"></i> Manage Leave Requests
+                </a>
+
+                <div class="nav-section-label">Reports &amp; Account</div>
+
+                <a href="{% url 'hr_employee_report'%}" class="nav-item">
+                    <i class="fas fa-chart-bar"></i> Employee Reports
+                </a>
+
+                <a href="{% url 'hr_profile' %}" class="nav-item">
+                    <i class="fas fa-id-card"></i> My Profile
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <!-- NEW: added id="hrLogoutBtn" to trigger popup -->
+                <a href="{% url 'login' %}" class="nav-item logout" id="hrLogoutBtn">
+                    <i class="fas fa-right-from-bracket"></i> Logout
+                </a>
+            </div>
+
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="main-content">
+
+            <!-- Top bar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>HR Dashboard</h1>
+                    <p>Welcome back, {{ employee.name }}! Here's your HR overview.</p>
+                </div>
+
+            </div>
+
+            <!-- Welcome banner -->
+            <div class="welcome-banner">
+                <div class="welcome-banner-text">
+                    <h2>Good morning, {{ employee.name }} 👋</h2>
+                    <p>You have <strong>{{ pending_leaves }} pending leave requests</strong> to review today.</p>
+                </div>
+                <div class="welcome-banner-meta">
+                    <div class="welcome-meta-item">
+                        <i class="fas fa-calendar-day"></i> {{ today|date:"D, d M Y" }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats grid -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label"><i class="fas fa-users" style="color:#059669;"></i> Total Employees
+                        </div>
+                        <div class="stat-value">{{ total_employees }}</div>
+                        <span class="stat-trend neutral">
+                            Includes all registered employees
+                        </span>
+                    </div>
+                    <div class="stat-icon green"><i class="fas fa-users"></i></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label"><i class="fas fa-calendar-check" style="color:#d97706;"></i> Pending
+                            Leaves</div>
+                        <div class="stat-value">{{ pending_leaves }}</div>
+                        <span class="stat-trend neutral"> Awaiting review</span>
+                    </div>
+                    <div class="stat-icon amber"><i class="fas fa-calendar-check"></i></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label"><i class="fas fa-user-plus" style="color:#2563eb;"></i> New Joiners
+                        </div>
+                        <div class="stat-value">{{ new_joiners }}</div>
+                        <span class="stat-trend up"><i class="fas fa-arrow-up"></i> This month</span>
+                    </div>
+                    <div class="stat-icon blue"><i class="fas fa-user-plus"></i></div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <div class="stat-label">
+                            <i class="fas fa-user-xmark" style="color:#7c3aed;"></i>
+                            Inactive Employees
+                        </div>
+
+                        <div class="stat-value">{{ inactive_employees }}</div>
+
+                        <span class="stat-trend neutral">
+                            Deactivated accounts
+                        </span>
+                    </div>
+
+                    <div class="stat-icon purple">
+                        <i class="fas fa-user-xmark"></i>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- ========== LOGOUT CONFIRMATION MODAL (NEW) ========== -->
+    <div class="logout-modal-overlay" id="logoutModalOverlay">
+        <div class="logout-modal">
+            <div class="logout-modal-icon">
+                <i class="fas fa-right-from-bracket"></i>
+            </div>
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to log out of NexusCore? You'll need to sign in again to access the HR dashboard.</p>
+            <div class="logout-modal-actions">
+                <button type="button" class="btn-cancel" id="cancelLogoutBtn">Cancel</button>
+                <a href="{% url 'login' %}" class="btn-confirm-logout" id="confirmLogoutBtn">
+                    Yes, Log Out
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== LOGOUT CONFIRMATION SCRIPT (NEW) ========== -->
+    <script>
+        // Get the elements
+        var hrLogoutBtn = document.getElementById('hrLogoutBtn');
+        var logoutModalOverlay = document.getElementById('logoutModalOverlay');
+        var cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+
+        // When user clicks "Logout" in sidebar → show confirmation popup
+        hrLogoutBtn.addEventListener('click', function (event) {
+            event.preventDefault();
+            logoutModalOverlay.classList.add('active');
+        });
+
+        // When user clicks "Cancel" → hide popup
+        cancelLogoutBtn.addEventListener('click', function () {
+            logoutModalOverlay.classList.remove('active');
+        });
+
+        // When user clicks the dark background → hide popup
+        logoutModalOverlay.addEventListener('click', function (event) {
+            if (event.target === logoutModalOverlay) {
+                logoutModalOverlay.classList.remove('active');
+            }
+        });
+
+        // When user presses Escape → hide popup
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && logoutModalOverlay.classList.contains('active')) {
+                logoutModalOverlay.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+
+</html>
